@@ -76,6 +76,19 @@ const translations = {
         ['Is a deposit required?', 'Your date is held once the booking is confirmed through Cal.com. The calendar will show the current deposit and payment details for your selected package.'],
       ],
     },
+    lead: {
+      title: 'Free Download: The Quinceañera Photo Timeline Checklist',
+      body: 'Never miss a moment — plan your photo booth timing around your reception, not just your ceremony.',
+      emailLabel: 'Email address',
+      placeholder: 'you@email.com',
+      submit: 'Send me the checklist',
+      sending: 'Sending…',
+      consent: 'By subscribing you agree to receive occasional emails from Guest List. Unsubscribe anytime.',
+      error: 'Something went wrong. Please try again in a moment.',
+      successTitle: 'Your checklist is ready.',
+      successBody: 'Download it below and keep it handy while you plan.',
+      download: 'Download the checklist',
+    },
     footer: {
       kicker: 'For the nights worth remembering.',
       body: 'Luxury digital photo booth experiences for Atlanta gatherings and the people who make them matter.',
@@ -160,6 +173,19 @@ const translations = {
         ['¿Se requiere un depósito?', 'Tu fecha queda reservada cuando confirmas la reserva en Cal.com. El calendario mostrará los detalles actuales del depósito y pago para el paquete elegido.'],
       ],
     },
+    lead: {
+      title: 'Descarga Gratis: Lista de Verificación de Momentos Fotográficos de Quinceañera',
+      body: 'No te pierdas ningún momento — planifica el horario de tu cabina según tu recepción, no solo tu ceremonia.',
+      emailLabel: 'Correo electrónico',
+      placeholder: 'tu@correo.com',
+      submit: 'Enviarme la lista',
+      sending: 'Enviando…',
+      consent: 'Al suscribirte aceptas recibir correos ocasionales de Guest List. Puedes cancelar cuando quieras.',
+      error: 'Algo salió mal. Inténtalo de nuevo en un momento.',
+      successTitle: 'Tu lista está lista.',
+      successBody: 'Descárgala aquí abajo y tenla a mano mientras planificas.',
+      download: 'Descargar la lista',
+    },
     footer: {
       kicker: 'Para las noches que merecen recordarse.',
       body: 'Experiencias de fotomatón digital de lujo para las reuniones de Atlanta y las personas que las hacen importantes.',
@@ -177,6 +203,8 @@ const translations = {
 } as const;
 
 const packageKeys: PackageKey[] = ['social', 'signature', 'celebration'];
+// Order of the pricing cards (highest price first, for price anchoring). The booking tabs keep the packageKeys order above.
+const cardOrder: PackageKey[] = ['celebration', 'signature', 'social'];
 const slugs: Record<PackageKey, string> = {
   social: 'the-social-package-selfie-booth',
   signature: 'the-signature-package-selfie-booth',
@@ -296,6 +324,91 @@ function BookingEmbed({ slug, label, fallback, loading }: { slug: string; label:
   );
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// LEAD MAGNET — Free Quinceañera Photo Timeline Checklist
+//
+// TO GO LIVE:
+//   1) Create a free form at https://formspree.io
+//   2) Replace YOUR_FORM_ID below with your real form ID
+//      (your endpoint will look like https://formspree.io/f/xyzabcde)
+//   3) Upload your PDF to artifacts/guest-list/public/quinceanera-checklist.pdf
+// ─────────────────────────────────────────────────────────────────────────────
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID'; // <-- PASTE YOUR FORMSPREE ENDPOINT HERE
+const CHECKLIST_PDF = '/quinceanera-checklist.pdf';
+
+type LeadCopy = {
+  title: string;
+  body: string;
+  emailLabel: string;
+  placeholder: string;
+  submit: string;
+  sending: string;
+  consent: string;
+  error: string;
+  successTitle: string;
+  successBody: string;
+  download: string;
+};
+
+function LeadMagnet({ copy, language }: { copy: LeadCopy; language: Language }) {
+  const [email, setEmail] = useState('');
+  const [honey, setHoney] = useState('');
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+
+  const submit = async () => {
+    if (status === 'sending') return;
+    // Bots tend to fill the hidden field; quietly ignore them.
+    if (honey) {
+      setStatus('success');
+      return;
+    }
+    setStatus('sending');
+    try {
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, language, source: 'quinceanera-checklist' }),
+      });
+      setStatus(response.ok ? 'success' : 'error');
+    } catch {
+      setStatus('error');
+    }
+  };
+
+  return (
+    <section id="checklist" className="bg-[#1c1712] px-5 py-20 text-[#f5eee2] md:px-10 md:py-28" data-testid="section-lead-magnet">
+      <div className="mx-auto grid max-w-[1320px] gap-10 md:grid-cols-[1.15fr_.85fr] md:items-center md:gap-16">
+        <div>
+          <span className="block h-px w-14 bg-[#c9a75d]" aria-hidden="true" />
+          <h2 className="mt-8 max-w-[680px] font-display text-[clamp(2.2rem,5vw,4.4rem)] leading-[.98] tracking-[-.04em] text-[#f5eee2]">{copy.title}</h2>
+          <p className="mt-6 max-w-[520px] text-[15px] leading-7 text-[#e7dcca] md:text-[17px]">{copy.body}</p>
+        </div>
+        <div className="border border-[#c9a75d]/40 bg-[#241d16] p-6 md:p-9">
+          {status === 'success' ? (
+            <div role="status" data-testid="lead-success">
+              <span className="flex h-10 w-10 items-center justify-center border border-[#c9a75d] text-[#d9b76a]"><Check size={18} /></span>
+              <p className="mt-5 font-display text-3xl leading-tight text-[#f5eee2]">{copy.successTitle}</p>
+              <p className="mt-3 text-[15px] leading-7 text-[#e7dcca]">{copy.successBody}</p>
+              <a href={CHECKLIST_PDF} download className="group mt-7 inline-flex items-center gap-4 bg-[#c9a75d] px-6 py-4 text-[11px] font-bold uppercase tracking-[.15em] text-[#20170e] transition hover:bg-[#ecd28f]" data-testid="link-lead-download">{copy.download}<ArrowDown size={15} /></a>
+            </div>
+          ) : (
+            <form onSubmit={(event) => { event.preventDefault(); void submit(); }} data-testid="form-lead">
+              <label htmlFor="lead-email" className="font-mono-brand text-[10px] uppercase tracking-[.2em] text-[#d9b76a]">{copy.emailLabel}</label>
+              <input id="lead-email" name="email" type="email" required autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder={copy.placeholder} className="mt-3 w-full border border-[#c9a75d]/50 bg-transparent px-4 py-4 text-[15px] text-[#f5eee2] outline-none transition placeholder:text-[#8f826d] focus:border-[#ecd28f]" data-testid="input-lead-email" />
+              <div className="hidden" aria-hidden="true">
+                <label>Leave this field empty<input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" value={honey} onChange={(event) => setHoney(event.target.value)} /></label>
+              </div>
+              <button type="submit" disabled={status === 'sending'} className="mt-4 inline-flex w-full items-center justify-center bg-[#c9a75d] px-6 py-4 text-[11px] font-bold uppercase tracking-[.15em] text-[#20170e] transition hover:bg-[#ecd28f] disabled:cursor-wait disabled:opacity-60" data-testid="button-lead-submit">{status === 'sending' ? copy.sending : copy.submit}</button>
+              {status === 'error' ? <p role="alert" className="mt-4 text-sm leading-6 text-[#e9b7a3]">{copy.error}</p> : null}
+              <p className="mt-4 text-xs leading-5 text-[#9c8f79]">{copy.consent}</p>
+            </form>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function AppHome() {
   const [language, setLanguage] = useState<Language>(() => (localStorage.getItem('guest-list-language') as Language) || 'en');
   const [menuOpen, setMenuOpen] = useState(false);
@@ -304,6 +417,7 @@ function AppHome() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const t = translations[language];
   const packageData = useMemo(() => packageKeys.map((key) => ({ key, ...t.packages[key] })), [t]);
+  const cardData = useMemo(() => cardOrder.map((key) => ({ key, ...t.packages[key] })), [t]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 34);
@@ -390,7 +504,7 @@ function AppHome() {
             <p className="max-w-[310px] text-sm leading-6 text-[#cbbda7]">{t.packages.body}</p>
           </div>
           <div className="grid gap-4 lg:grid-cols-3">
-            {packageData.map((item, index) => <article key={item.key} className={`relative flex flex-col border p-6 transition-transform duration-300 hover:-translate-y-1 md:p-8 ${item.key === 'signature' ? 'border-[#c9a75d] bg-[#453722]' : 'border-[#69583e] bg-[#32271b]'}`} data-testid={`card-package-${item.key}`}>
+            {cardData.map((item, index) => <article key={item.key} className={`relative flex flex-col border p-6 transition-transform duration-300 hover:-translate-y-1 md:p-8 ${item.key === 'signature' ? 'border-[#c9a75d] bg-[#453722]' : 'border-[#69583e] bg-[#32271b]'}`} data-testid={`card-package-${item.key}`}>
               {item.key === 'signature' && <span className="absolute right-5 top-5 font-mono-brand text-[9px] uppercase tracking-[.18em] text-[#d9b76a]">{t.packages.popular}</span>}
               <p className="font-mono-brand text-[10px] uppercase tracking-[.2em] text-[#bca885]">0{index + 1}</p>
               <h3 className="mt-12 font-display text-4xl tracking-[-.03em]">{item.name}</h3>
@@ -404,6 +518,8 @@ function AppHome() {
           <p className="mt-7 text-center font-mono-brand text-[9px] uppercase tracking-[.15em] text-[#a59479]">{t.packages.note}</p>
         </div>
       </section>
+
+      <LeadMagnet copy={t.lead} language={language} />
 
       <section id="gallery" className="bg-[#e9e0d1] px-5 py-24 md:px-10 md:py-32">
         <div className="mx-auto max-w-[1320px]">

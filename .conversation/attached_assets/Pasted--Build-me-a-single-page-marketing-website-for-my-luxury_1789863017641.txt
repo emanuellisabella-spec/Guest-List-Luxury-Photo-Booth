@@ -1,0 +1,118 @@
+```
+Build me a single-page marketing website for my luxury photo booth rental business, "Guest List" (domain: guestlistbooth.com), serving the Atlanta, GA metro area.
+
+TECH STACK: React + Tailwind CSS (Vite). Fully responsive, mobile-first — most visitors will be on their phones.
+
+AESTHETIC: Black and gold luxury.
+- Background: deep black (#0a0a0a) with a secondary charcoal (#1a1a1a) for section contrast
+- Accent: metallic gold (#C9A24B), used for headings, buttons, dividers, and icons
+- Typography: an elegant serif for headings (e.g. Playfair Display or Cormorant Garamond from Google Fonts) paired with a clean sans-serif for body text (e.g. Inter or Montserrat)
+- Generous white space, subtle gold hairline dividers, no clutter
+- Buttons: black with gold border/text, filling gold on hover
+- Subtle fade-in/scroll animations are fine; keep it tasteful, not flashy
+
+LANGUAGE TOGGLE:
+- A persistent EN/ES toggle in the top nav (flag icons or "EN | ES" text)
+- Store all site copy in a simple translations object/JSON (not hardcoded strings) so every section — nav, hero, packages, about, booking, FAQ, footer — switches language instantly with no page reload
+- Default to English, remember the user's choice in localStorage
+
+SECTIONS (in order):
+
+1. Hero — full-width, dark background, business name "Guest List" in large gold serif type, a short tagline (placeholder: "Premium photo experiences for Atlanta's most memorable nights"), and a gold CTA button "Check Availability" that scrolls to the booking section
+
+2. About/Experience — 2-3 short paragraphs (placeholder copy) describing the digital iPad photo booth experience: instant sharing, GIFs/boomerangs, custom branded templates, online gallery
+
+3. Packages — three pricing cards displayed side by side on desktop (stack vertically on mobile), named exactly: "The Social," "The Signature," and "The Celebration." Highlight The Signature as the middle/most-popular card with a gold border or "Most Popular" badge. Each card needs: package name, price, duration, a bullet list of inclusions, and a "Book Now" button that scrolls to the booking section AND auto-selects that package's tab there. Use this copy for each card:
+
+   THE SOCIAL — $399 — 2 hours
+   An effortless, elevated photo experience for your celebration. Guests step up, strike a pose, and walk away with instant digital keepsakes.
+   Includes: 2 hours on-site with your dedicated Guest List host; digital photos, GIFs & boomerangs; one curated backdrop; custom-designed template; instant sharing via text/email/QR; private online gallery delivered same night.
+
+   THE SIGNATURE — $549 — 3 hours (MOST POPULAR)
+   Our most-booked experience — built for hosts who want the night to feel as good as it looks.
+   Includes: 3 hours on-site with your dedicated Guest List host; digital photos, GIFs & boomerangs; premium backdrop selection; custom-designed template; instant sharing via text/email/QR; private online gallery delivered same night; guest lead capture.
+
+   THE CELEBRATION — $749 — 4 hours
+   The full Guest List experience. Four hours of uninterrupted coverage, a fully branded setup, and every detail styled to match the caliber of your event.
+   Includes: 4 hours on-site with your dedicated Guest List host; digital photos, GIFs & boomerangs; premium backdrop selection; fully custom template & branded start screen; curated prop styling; instant sharing via text/email/QR; private online gallery delivered same night; guest lead capture.
+
+4. Gallery — a responsive image grid placeholder (6-9 images) for event photos, with a code comment marking where to swap in real images
+
+5. Booking — implement as three tabs (one per package: Social / Signature / Celebration) within the booking section, so only one Cal.com calendar is visible at a time, defaulting to whichever package the visitor arrived from via "Book Now." Wrap each embed in a container styled consistently with the rest of the site (dark background, subtle gold accent border, matching padding/spacing) so it reads as part of the page, not a foreign widget. Use this exact embed code, split across the three tabs:
+
+<!-- Cal.com loader (only needs to run once per page) -->
+<script type="text/javascript">
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+  Cal.config = Cal.config || {};
+  Cal.config.forwardQueryParams = true;
+</script>
+
+<!-- THE SOCIAL -->
+<div style="width:100%;height:100%;overflow:scroll" id="my-cal-inline-the-social-package-selfie-booth"></div>
+<script type="text/javascript">
+  Cal("init", "the-social-package-selfie-booth", {origin:"https://app.cal.com"});
+  Cal.ns["the-social-package-selfie-booth"]("inline", {
+    elementOrSelector:"#my-cal-inline-the-social-package-selfie-booth",
+    config: {"layout":"month_view","useSlotsViewOnSmallScreen":"true","theme":"dark"},
+    calLink: "guestlistbooth/the-social-package-selfie-booth",
+  });
+  Cal.ns["the-social-package-selfie-booth"]("ui", {
+    "hideEventTypeDetails": false,
+    "layout": "month_view",
+    "theme": "dark",
+    "styles": { "branding": { "brandColor": "#C9A24B" } }
+  });
+</script>
+
+<!-- THE SIGNATURE -->
+<div style="width:100%;height:100%;overflow:scroll" id="my-cal-inline-the-signature-package-selfie-booth"></div>
+<script type="text/javascript">
+  Cal("init", "the-signature-package-selfie-booth", {origin:"https://app.cal.com"});
+  Cal.ns["the-signature-package-selfie-booth"]("inline", {
+    elementOrSelector:"#my-cal-inline-the-signature-package-selfie-booth",
+    config: {"layout":"month_view","useSlotsViewOnSmallScreen":"true","theme":"dark"},
+    calLink: "guestlistbooth/the-signature-package-selfie-booth",
+  });
+  Cal.ns["the-signature-package-selfie-booth"]("ui", {
+    "hideEventTypeDetails": false,
+    "layout": "month_view",
+    "theme": "dark",
+    "styles": { "branding": { "brandColor": "#C9A24B" } }
+  });
+</script>
+
+<!-- THE CELEBRATION -->
+<div style="width:100%;height:100%;overflow:scroll" id="my-cal-inline-the-celebration-package-selfie-booth"></div>
+<script type="text/javascript">
+  Cal("init", "the-celebration-package-selfie-booth", {origin:"https://app.cal.com"});
+  Cal.ns["the-celebration-package-selfie-booth"]("inline", {
+    elementOrSelector:"#my-cal-inline-the-celebration-package-selfie-booth",
+    config: {"layout":"month_view","useSlotsViewOnSmallScreen":"true","theme":"dark"},
+    calLink: "guestlistbooth/the-celebration-package-selfie-booth",
+  });
+  Cal.ns["the-celebration-package-selfie-booth"]("ui", {
+    "hideEventTypeDetails": false,
+    "layout": "month_view",
+    "theme": "dark",
+    "styles": { "branding": { "brandColor": "#C9A24B" } }
+  });
+</script>
+
+   Note: verify the-social-package-selfie-booth and the-signature-package-selfie-booth slugs match what's actually on the guestlistbooth Cal.com account — if a slug doesn't exist, flag it rather than guessing.
+
+6. Testimonials — a simple 2-3 quote carousel or grid, placeholder text
+
+7. FAQ — a collapsible accordion, 5-6 placeholder questions (travel radius, deposit policy, setup time, etc.)
+
+8. Footer — business name, Instagram/TikTok icon links (placeholder URLs), email/phone placeholder, and "Serving Atlanta, Buckhead, Marietta, Smyrna & surrounding areas"
+
+FUNCTIONALITY:
+- Sticky nav bar that turns solid black on scroll (starts transparent over the hero)
+- Smooth scroll to anchor sections from nav links
+- Fully responsive down to 375px width
+- Fast load — optimize/lazy-load images
+
+Set this up so all text content (English and Spanish) lives in one clearly organized translations file at the top of the project, and all colors/fonts are defined as CSS variables or a Tailwind config theme, so I can hand this back to you later and say "change X" without you having to hunt through the codebase.
+
+Do not build a custom payment form or booking backend — the Cal.com embeds above handle all scheduling and deposit collection.
+```

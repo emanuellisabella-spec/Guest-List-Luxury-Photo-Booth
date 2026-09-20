@@ -1,0 +1,1 @@
+- [Cal.com embed loader](calcom-embed.md) — use the exact queued namespace bootstrap once per page; partial stubs can trigger opaque runtime errors.

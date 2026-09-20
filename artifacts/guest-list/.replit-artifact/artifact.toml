@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Guest List Luxury Photo Booth"
+description = "A single-page luxury photo booth rental website for Guest List, serving Atlanta and surrounding metro areas. It presents the brand, packages, gallery, testimonials, FAQ, and package-aware Cal.com booking tabs in English and Spanish."
+version = "1.0.0"
+id = "artifacts/guest-list"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 21157
+
+[services.development]
+run = "pnpm --filter @workspace/guest-list run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/guest-list", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/guest-list/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "21157"
+BASE_PATH = "/"

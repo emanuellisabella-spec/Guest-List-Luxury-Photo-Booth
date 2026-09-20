@@ -249,11 +249,15 @@ function BookingEmbed({ slug, label, fallback, loading }: { slug: string; label:
     if (!element) return;
     const elementId = `my-cal-inline-${slug}`;
     element.id = elementId;
+    setReady(false);
+    element.innerHTML = '';
     const render = () => {
       const cal = window.Cal;
-      const namespace = cal?.ns?.[slug];
-      if (!cal || !namespace) return;
-      cal('init', slug, { origin: 'https://app.cal.com' });
+      if (!cal) return;
+      const ns = `${slug}-${Date.now().toString(36)}`;
+      cal('init', ns, { origin: 'https://app.cal.com' });
+      const namespace = cal.ns?.[ns];
+      if (!namespace) return;
       namespace('inline', {
         elementOrSelector: `#${elementId}`,
         config: { layout: 'month_view', useSlotsViewOnSmallScreen: 'true', theme: 'dark' },
@@ -267,15 +271,14 @@ function BookingEmbed({ slug, label, fallback, loading }: { slug: string; label:
       });
       setReady(true);
     };
-    let retryTimer: number | undefined;
+    let cancelled = false;
     ensureCalScript()
       .then(() => {
-        render();
-        retryTimer = window.setTimeout(render, 900);
+        if (!cancelled) render();
       })
       .catch(() => undefined);
     return () => {
-      if (retryTimer) window.clearTimeout(retryTimer);
+      cancelled = true;
     };
   }, [slug]);
   return (
@@ -285,7 +288,7 @@ function BookingEmbed({ slug, label, fallback, loading }: { slug: string; label:
         <div className="text-center">
           <div className="mx-auto mb-4 h-8 w-8 animate-pulse rounded-full border border-[#b89044] border-t-transparent" />
           <p className="font-mono-brand text-[10px] uppercase tracking-[.2em] text-[#73634b]">{loading}</p>
-          <a className="pointer-events-auto mt-5 inline-flex items-center gap-2 border-b border-[#b89044] pb-1 text-xs font-semibold uppercase tracking-[.14em] text-[#322619] transition-colors hover:text-[#9a6e22]" href={`https://cal.com/guest-list/${slug}`} target="_blank" rel="noreferrer" data-testid="link-booking-fallback">{fallback} <ArrowUpRight size={13} /></a>
+          <a className={`${ready ? 'pointer-events-none' : 'pointer-events-auto'} mt-5 inline-flex items-center gap-2 border-b border-[#b89044] pb-1 text-xs font-semibold uppercase tracking-[.14em] text-[#322619] transition-colors hover:text-[#9a6e22]`} href={`https://cal.com/guestlistbooth/${slug}`} target="_blank" rel="noreferrer" data-testid="link-booking-fallback">{fallback} <ArrowUpRight size={13} /></a>
         </div>
       </div>
       <span className="sr-only">{label}</span>

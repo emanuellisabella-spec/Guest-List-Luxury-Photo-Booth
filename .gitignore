@@ -2,6 +2,8 @@
 
 # compiled output
 dist
+build
+.vite
 tmp
 out-tsc
 *.tsbuildinfo
@@ -35,6 +37,7 @@ node_modules
 npm-debug.log
 yarn-error.log
 testem.log
+*.log
 /typings
 
 # System Files

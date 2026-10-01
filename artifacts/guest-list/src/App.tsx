@@ -527,7 +527,7 @@ function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; 
           <div>
             <p className="font-mono-brand text-[10px] uppercase tracking-[.22em] text-[#9a6e22]">{t.about.label}</p>
             <div className="mt-7 h-px w-16 bg-[#b89044]" />
-            <figure className="mt-8 aspect-[4/5] max-w-[440px] overflow-hidden bg-[#e4dccb]"><img loading="lazy" src={leadMagnet === 'quince' ? '/hero-wedding.webp' : '/hero-quinceanera.webp'} alt={t.about.imageAlt} className={`h-full w-full object-cover ${leadMagnet === 'quince' ? 'object-[100%_50%]' : 'object-[78%_40%]'}`} /></figure>
+            <figure className="mt-8 aspect-[3/4] max-w-[440px] overflow-hidden bg-[#e4dccb]"><img loading="lazy" src="/booth-kiosk.webp" alt={t.about.imageAlt} width={1086} height={1448} className="h-full w-full object-cover" /></figure>
           </div>
           <div>
             <h2 className="max-w-[700px] whitespace-pre-line font-display text-[clamp(2.8rem,5.2vw,5rem)] leading-[.95] tracking-[-.045em] text-[#30251a]">{t.about.title}</h2>

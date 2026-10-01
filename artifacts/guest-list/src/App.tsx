@@ -378,6 +378,9 @@ const ZOHO_FORM = {
     zctd: '',
     zc_formIx: '3z819d0a1b9bb968330498d1a2eca125b5131f7982b3c22c34db73b622a5cc5890',
     PRIVACY_POLICY: 'PRIVACY_AGREED',
+    // Matches Zoho's "No Script" embed, which is the variant meant for plain form posts.
+    // (That embed also has a zc_spmSubmit bot-trap field that its script removes; we never send it.)
+    scriptless: 'yes',
   } as Record<string, string>,
 };
 

@@ -438,7 +438,7 @@ function LeadMagnet({ copy, language, pdfPath, source }: { copy: LeadCopy; langu
 }
 
 function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; leadMagnet: 'wedding' | 'quince' }) {
-  const [language, setLanguage] = useState<Language>(() => initialLanguage || (localStorage.getItem('guest-list-language') as Language) || 'en');
+  const [language, setLanguage] = useState<Language>(initialLanguage ?? 'en');
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<PackageKey>('signature');
@@ -464,7 +464,6 @@ function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; 
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
-  useEffect(() => localStorage.setItem('guest-list-language', language), [language]);
 
   const jump = (id: string) => {
     setMenuOpen(false);

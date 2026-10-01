@@ -358,11 +358,66 @@ function BookingEmbed({ slug, label, fallback, loading }: { slug: string; label:
 // ─────────────────────────────────────────────────────────────────────────────
 // LEAD MAGNET — email capture
 //
-// The form posts to /api/subscribe (artifacts/guest-list/api/subscribe.js), a
-// serverless function that adds the person to the Zoho Campaigns email list with
-// their Source and Language. See that file for the env vars it needs.
+// Posts the sign-up straight from the visitor's browser to the Zoho Campaigns
+// form (the same way Zoho's own embed code does), tagged with Source and Language.
+// These identifiers are public: they appear in any page that embeds the Zoho form.
 // ─────────────────────────────────────────────────────────────────────────────
-const SUBSCRIBE_ENDPOINT = '/api/subscribe';
+const ZOHO_FORM = {
+  action: 'https://zgnp-zngp.maillist-manage.com/weboptin.zc',
+  hidden: {
+    zc_trackCode: '',
+    viewFrom: 'URL_ACTION',
+    submitType: 'optinCustomView',
+    lD: '117d7e7358a05c771',
+    emailReportId: '',
+    zx: '12921b4de',
+    zcvers: '3.0',
+    oldListIds: '',
+    mode: 'OptinCreateView',
+    zcld: '117d7e7358a05c771',
+    zctd: '',
+    zc_formIx: '3z819d0a1b9bb968330498d1a2eca125b5131f7982b3c22c34db73b622a5cc5890',
+    PRIVACY_POLICY: 'PRIVACY_AGREED',
+  } as Record<string, string>,
+};
+
+// Submits a hidden <form> into a hidden <iframe>. Zoho's response can't be read cross-origin,
+// so we wait for the frame to load (or a short timeout) and treat that as sent.
+function postToZoho(fields: Record<string, string>) {
+  return new Promise<void>((resolve) => {
+    const frameName = `zc-signup-${Date.now()}`;
+    const iframe = document.createElement('iframe');
+    iframe.name = frameName;
+    iframe.title = 'Sign-up';
+    iframe.setAttribute('aria-hidden', 'true');
+    iframe.style.display = 'none';
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = ZOHO_FORM.action;
+    form.target = frameName;
+    form.style.display = 'none';
+    for (const [name, value] of Object.entries({ ...ZOHO_FORM.hidden, ...fields })) {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = name;
+      input.value = value;
+      form.appendChild(input);
+    }
+    document.body.append(iframe, form);
+    const startedAt = Date.now();
+    let finished = false;
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      setTimeout(resolve, Math.max(0, 1500 - (Date.now() - startedAt)));
+    };
+    form.submit();
+    iframe.addEventListener('load', finish);
+    setTimeout(finish, 6000);
+    // Keep the frame around long enough for the request to complete before cleaning up.
+    setTimeout(() => { iframe.remove(); form.remove(); }, 20000);
+  });
+}
 
 type LeadCopy = {
   title: string;
@@ -396,12 +451,14 @@ function LeadMagnet({ copy, language, pdfPath, source }: { copy: LeadCopy; langu
     }
     setStatus('sending');
     try {
-      const response = await fetch(SUBSCRIBE_ENDPOINT, {
-        method: 'POST',
-        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify({ firstName, lastName, email, language, source, website: honey }),
+      await postToZoho({
+        FIRSTNAME: firstName.trim(),
+        LASTNAME: lastName.trim(),
+        CONTACT_EMAIL: email.trim(),
+        CONTACT_CF1: source,
+        CONTACT_CF2: language === 'es' ? 'Spanish' : 'English',
       });
-      setStatus(response.ok ? 'success' : 'error');
+      setStatus('success');
     } catch {
       setStatus('error');
     }

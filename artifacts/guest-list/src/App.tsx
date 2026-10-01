@@ -355,7 +355,7 @@ function BookingEmbed({ slug, label, fallback, loading }: { slug: string; label:
 // ─────────────────────────────────────────────────────────────────────────────
 // LEAD MAGNET — email capture
 //
-// The form posts to /api/subscribe (artifacts/guest-list/api/subscribe.ts), a
+// The form posts to /api/subscribe (artifacts/guest-list/api/subscribe.js), a
 // serverless function that adds the person to the Zoho Campaigns email list with
 // their Source and Language. See that file for the env vars it needs.
 // ─────────────────────────────────────────────────────────────────────────────

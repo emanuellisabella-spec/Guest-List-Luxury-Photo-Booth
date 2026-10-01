@@ -14,6 +14,7 @@
 //        ZOHO_FORM_FIELDS   JSON of every hidden <input> as {"name":"value", ...}
 //                           (leave out the email, Source and Language inputs)
 //        ZOHO_EMAIL_FIELD   name of the email input     (default: CONTACT_EMAIL)
+//        ZOHO_FIRSTNAME_FIELD / ZOHO_LASTNAME_FIELD  name inputs (default: FIRSTNAME / LASTNAME)
 //        ZOHO_SOURCE_FIELD  name of the Source input    (optional)
 //        ZOHO_LANGUAGE_FIELD name of the Language input (optional)
 //   4. Redeploy. Until these are set the endpoint returns 503 and the form shows an error.
@@ -31,12 +32,15 @@ export default async function handler(req, res) {
 
   const body = typeof req.body === 'string' ? safeParse(req.body) : req.body;
   const email = typeof body?.email === 'string' ? body.email.trim().toLowerCase() : '';
+  const firstName = typeof body?.firstName === 'string' ? body.firstName.trim().slice(0, 100) : '';
+  const lastName = typeof body?.lastName === 'string' ? body.lastName.trim().slice(0, 50) : '';
   const source = typeof body?.source === 'string' ? body.source.slice(0, 80) : '';
   const language = body?.language === 'es' ? 'Spanish' : 'English';
 
   // Bots fill the hidden field; pretend it worked.
   if (typeof body?.website === 'string' && body.website) return res.status(200).json({ ok: true });
   if (!EMAIL_RE.test(email) || email.length > 254) return res.status(400).json({ ok: false, error: 'invalid_email' });
+  if (!firstName || !lastName) return res.status(400).json({ ok: false, error: 'name_required' });
 
   const action = process.env.ZOHO_FORM_ACTION;
   if (!action) return res.status(503).json({ ok: false, error: 'not_configured' });
@@ -45,6 +49,8 @@ export default async function handler(req, res) {
   const hidden = safeParse(process.env.ZOHO_FORM_FIELDS || '{}');
   for (const [key, value] of Object.entries(hidden || {})) params.set(key, String(value));
   params.set(process.env.ZOHO_EMAIL_FIELD || 'CONTACT_EMAIL', email);
+  params.set(process.env.ZOHO_FIRSTNAME_FIELD || 'FIRSTNAME', firstName);
+  params.set(process.env.ZOHO_LASTNAME_FIELD || 'LASTNAME', lastName);
   if (process.env.ZOHO_SOURCE_FIELD) params.set(process.env.ZOHO_SOURCE_FIELD, source);
   if (process.env.ZOHO_LANGUAGE_FIELD) params.set(process.env.ZOHO_LANGUAGE_FIELD, language);
 

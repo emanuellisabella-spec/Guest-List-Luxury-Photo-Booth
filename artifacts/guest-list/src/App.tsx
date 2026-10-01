@@ -74,6 +74,8 @@ const translations = {
     leadQuince: {
       title: 'Free Download: The Quinceañera Photo Timeline Checklist',
       body: 'Never miss a moment — plan your photo booth timing around your reception, not just your ceremony.',
+      firstNameLabel: 'First name',
+      lastNameLabel: 'Last name',
       emailLabel: 'Email address',
       placeholder: 'you@email.com',
       submit: 'Send me the checklist',
@@ -87,6 +89,8 @@ const translations = {
           leadWedding: {
         title: 'Free Download: The Wedding Reception Photo Timeline',
         body: 'A simple guide to placing your photo booth at the right moment, so it adds to the night instead of competing with it.',
+        firstNameLabel: 'First name',
+        lastNameLabel: 'Last name',
         emailLabel: 'Email address',
         placeholder: 'you@email.com',
         submit: 'Send me the timeline',
@@ -179,6 +183,8 @@ footer: {
     leadQuince: {
       title: 'Descarga Gratis: Lista de Verificación de Momentos Fotográficos de Quinceañera',
       body: 'No te pierdas ningún momento — planifica el horario de tu cabina según tu recepción, no solo tu ceremonia.',
+      firstNameLabel: 'Nombre',
+      lastNameLabel: 'Apellido',
       emailLabel: 'Correo electrónico',
       placeholder: 'tu@correo.com',
       submit: 'Enviarme la lista',
@@ -192,6 +198,8 @@ footer: {
           leadWedding: {
         title: 'Descarga Gratis: El Horario de Fotos para tu Recepción de Boda',
         body: 'Una guía sencilla para ubicar tu cabina de fotos en el momento preciso, para que se sume a la noche en lugar de competir con ella.',
+        firstNameLabel: 'Nombre',
+        lastNameLabel: 'Apellido',
         emailLabel: 'Correo electrónico',
         placeholder: 'tu@correo.com',
         submit: 'Enviarme el horario',
@@ -359,6 +367,8 @@ const SUBSCRIBE_ENDPOINT = '/api/subscribe';
 type LeadCopy = {
   title: string;
   body: string;
+  firstNameLabel: string;
+  lastNameLabel: string;
   emailLabel: string;
   placeholder: string;
   submit: string;
@@ -371,6 +381,8 @@ type LeadCopy = {
 };
 
 function LeadMagnet({ copy, language, pdfPath, source }: { copy: LeadCopy; language: Language; pdfPath: string; source: string }) {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [honey, setHoney] = useState('');
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
@@ -387,7 +399,7 @@ function LeadMagnet({ copy, language, pdfPath, source }: { copy: LeadCopy; langu
       const response = await fetch(SUBSCRIBE_ENDPOINT, {
         method: 'POST',
         headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, language, source, website: honey }),
+        body: JSON.stringify({ firstName, lastName, email, language, source, website: honey }),
       });
       setStatus(response.ok ? 'success' : 'error');
     } catch {
@@ -413,8 +425,20 @@ function LeadMagnet({ copy, language, pdfPath, source }: { copy: LeadCopy; langu
             </div>
           ) : (
             <form onSubmit={(event) => { event.preventDefault(); void submit(); }} data-testid="form-lead">
-              <label htmlFor="lead-email" className="font-mono-brand text-[10px] uppercase tracking-[.2em] text-[#d9b76a]">{copy.emailLabel}</label>
-              <input id="lead-email" name="email" type="email" required autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder={copy.placeholder} className="mt-3 w-full border border-[#c9a75d]/50 bg-transparent px-4 py-4 text-[15px] text-[#f5eee2] outline-none transition placeholder:text-[#8f826d] focus:border-[#ecd28f]" data-testid="input-lead-email" />
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="lead-first-name" className="font-mono-brand text-[10px] uppercase tracking-[.2em] text-[#d9b76a]">{copy.firstNameLabel}</label>
+                  <input id="lead-first-name" name="firstName" type="text" required maxLength={100} autoComplete="given-name" value={firstName} onChange={(event) => setFirstName(event.target.value)} className="mt-3 w-full border border-[#c9a75d]/50 bg-transparent px-4 py-4 text-[15px] text-[#f5eee2] outline-none transition placeholder:text-[#8f826d] focus:border-[#ecd28f]" data-testid="input-lead-first-name" />
+                </div>
+                <div>
+                  <label htmlFor="lead-last-name" className="font-mono-brand text-[10px] uppercase tracking-[.2em] text-[#d9b76a]">{copy.lastNameLabel}</label>
+                  <input id="lead-last-name" name="lastName" type="text" required maxLength={50} autoComplete="family-name" value={lastName} onChange={(event) => setLastName(event.target.value)} className="mt-3 w-full border border-[#c9a75d]/50 bg-transparent px-4 py-4 text-[15px] text-[#f5eee2] outline-none transition placeholder:text-[#8f826d] focus:border-[#ecd28f]" data-testid="input-lead-last-name" />
+                </div>
+              </div>
+              <div className="mt-4">
+                <label htmlFor="lead-email" className="font-mono-brand text-[10px] uppercase tracking-[.2em] text-[#d9b76a]">{copy.emailLabel}</label>
+                <input id="lead-email" name="email" type="email" required autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder={copy.placeholder} className="mt-3 w-full border border-[#c9a75d]/50 bg-transparent px-4 py-4 text-[15px] text-[#f5eee2] outline-none transition placeholder:text-[#8f826d] focus:border-[#ecd28f]" data-testid="input-lead-email" />
+              </div>
               <div className="hidden" aria-hidden="true">
                 <label>Leave this field empty<input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" value={honey} onChange={(event) => setHoney(event.target.value)} /></label>
               </div>

@@ -204,7 +204,7 @@ const translations = {
 
 const packageKeys: PackageKey[] = ['social', 'signature', 'celebration'];
 // Order of the pricing cards (highest price first, for price anchoring). The booking tabs keep the packageKeys order above.
-const cardOrder: PackageKey[] = ['celebration', 'signature', 'social'];
+const cardOrder: PackageKey[] = ['social', 'signature', 'celebration'];
 const slugs: Record<PackageKey, string> = {
   social: 'the-social-package-selfie-booth',
   signature: 'the-signature-package-selfie-booth',
@@ -413,7 +413,7 @@ function AppHome() {
   const [language, setLanguage] = useState<Language>(() => (localStorage.getItem('guest-list-language') as Language) || 'en');
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [selectedPackage, setSelectedPackage] = useState<PackageKey>('social');
+  const [selectedPackage, setSelectedPackage] = useState<PackageKey>('signature');
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const t = translations[language];
   const packageData = useMemo(() => packageKeys.map((key) => ({ key, ...t.packages[key] })), [t]);

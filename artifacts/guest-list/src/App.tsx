@@ -140,9 +140,9 @@ footer: {
       popular: 'Más reservado',
       book: 'Reservar ahora',
       note: 'Todos los paquetes incluyen entrega, montaje, desmontaje y una experiencia elegante sin asistente.',
-      social: { name: 'The Social', price: '$399', duration: '2 horas', description: 'Una experiencia fotográfica elevada y sin esfuerzo para tu celebración. Tus invitados posan y se llevan recuerdos digitales al instante.', items: ['2 horas en el evento con tu anfitrión Guest List', 'Fotos digitales, GIFs y boomerangs', 'Un fondo seleccionado', 'Plantilla diseñada a medida', 'Compartir al instante por texto/email/QR', 'Galería privada entregada esa misma noche'] },
-      signature: { name: 'The Signature', price: '$549', duration: '3 horas', description: 'Nuestra experiencia más reservada, creada para anfitriones que quieren que la noche se sienta tan bien como se ve.', items: ['3 horas en el evento con tu anfitrión Guest List', 'Fotos digitales, GIFs y boomerangs', 'Selección de fondos premium', 'Plantilla diseñada a medida', 'Compartir al instante por texto/email/QR', 'Galería privada entregada esa misma noche', 'Captura de datos de invitados'] },
-      celebration: { name: 'The Celebration', price: '$749', duration: '4 horas', description: 'La experiencia Guest List completa. Cuatro horas de cobertura, un montaje totalmente personalizado y cada detalle a la altura de tu evento.', items: ['4 horas en el evento con tu anfitrión Guest List', 'Fotos digitales, GIFs y boomerangs', 'Selección de fondos premium', 'Plantilla totalmente personalizada y pantalla de inicio con marca', 'Accesorios seleccionados', 'Compartir al instante por texto/email/QR', 'Galería privada entregada esa misma noche', 'Captura de datos de invitados'] },
+      social: { name: 'Paquete Fiesta', price: '$399', duration: '2 horas', description: 'Una experiencia fotográfica elevada y sin esfuerzo para tu celebración. Tus invitados posan y se llevan recuerdos digitales al instante.', items: ['2 horas en el evento con tu anfitrión Guest List', 'Fotos digitales, GIFs y boomerangs', 'Un fondo seleccionado', 'Plantilla diseñada a medida', 'Compartir al instante por texto/email/QR', 'Galería privada entregada esa misma noche'] },
+      signature: { name: 'Paquete Fiesta Grande', price: '$549', duration: '3 horas', description: 'Nuestra experiencia más reservada, creada para anfitriones que quieren que la noche se sienta tan bien como se ve.', items: ['3 horas en el evento con tu anfitrión Guest List', 'Fotos digitales, GIFs y boomerangs', 'Selección de fondos premium', 'Plantilla diseñada a medida', 'Compartir al instante por texto/email/QR', 'Galería privada entregada esa misma noche', 'Captura de datos de invitados'] },
+      celebration: { name: 'Paquete Fiesta Real', price: '$749', duration: '4 horas', description: 'La experiencia Guest List completa. Cuatro horas de cobertura, un montaje totalmente personalizado y cada detalle a la altura de tu evento.', items: ['4 horas en el evento con tu anfitrión Guest List', 'Fotos digitales, GIFs y boomerangs', 'Selección de fondos premium', 'Plantilla totalmente personalizada y pantalla de inicio con marca', 'Accesorios seleccionados', 'Compartir al instante por texto/email/QR', 'Galería privada entregada esa misma noche', 'Captura de datos de invitados'] },
     },
     gallery: {
       label: 'La prueba',
@@ -225,10 +225,17 @@ footer: {
 const packageKeys: PackageKey[] = ['social', 'signature', 'celebration'];
 // Order of the pricing cards (highest price first, for price anchoring). The booking tabs keep the packageKeys order above.
 const cardOrder: PackageKey[] = ['social', 'signature', 'celebration'];
-const slugs: Record<PackageKey, string> = {
-  social: 'the-social-package-selfie-booth',
-  signature: 'the-signature-package-selfie-booth',
-  celebration: 'the-celebration-package-selfie-booth',
+const slugs: Record<Language, Record<PackageKey, string>> = {
+  en: {
+    social: 'the-social-package-selfie-booth',
+    signature: 'the-signature-package-selfie-booth',
+    celebration: 'the-celebration-package-selfie-booth',
+  },
+  es: {
+    social: 'paquete-fiesta-dos-horas',
+    signature: 'paquete-fiesta-grande-tres-horas',
+    celebration: 'paquete-fiesta-real-cuatro-horas',
+  },
 };
 
 declare global {
@@ -525,7 +532,7 @@ function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; 
               <div className="mb-3 flex max-w-[640px] flex-wrap border-b border-[#ccbda4]" role="tablist" aria-label={t.booking.selected}>
                 {packageData.map((item) => <button key={item.key} role="tab" aria-selected={selectedPackage === item.key} onClick={() => setSelectedPackage(item.key)} className={`relative px-3 py-3 text-[10px] font-bold uppercase tracking-[.12em] transition first:pl-0 sm:px-5 ${selectedPackage === item.key ? 'text-[#9a6e22]' : 'text-[#8a7a63] hover:text-[#30251a]'}`} data-testid={`tab-package-${item.key}`}>{item.name}{selectedPackage === item.key && <span className="absolute inset-x-3 -bottom-px h-0.5 bg-[#b89044] first:inset-x-0 sm:inset-x-5" />}</button>)}
               </div>
-              <BookingEmbed slug={slugs[selectedPackage]} label={t.booking.selected} fallback={t.booking.fallback} loading={t.booking.loading} />
+              <BookingEmbed slug={slugs[language][selectedPackage]} label={t.booking.selected} fallback={t.booking.fallback} loading={t.booking.loading} />
             </div>
           </div>
         </div>

@@ -76,7 +76,7 @@ const translations = {
         ['Is a deposit required?', 'Your date is held once the booking is confirmed through Cal.com. The calendar will show the current deposit and payment details for your selected package.'],
       ],
     },
-    lead: {
+    leadQuince: {
       title: 'Free Download: The Quinceañera Photo Timeline Checklist',
       body: 'Never miss a moment — plan your photo booth timing around your reception, not just your ceremony.',
       emailLabel: 'Email address',
@@ -89,7 +89,20 @@ const translations = {
       successBody: 'Download it below and keep it handy while you plan.',
       download: 'Download the checklist',
     },
-    footer: {
+          leadWedding: {
+        title: 'Free Download: The Wedding Reception Photo Timeline',
+        body: 'A simple guide to placing your photo booth at the right moment, so it adds to the night instead of competing with it.',
+        emailLabel: 'Email address',
+        placeholder: 'you@email.com',
+        submit: 'Send me the timeline',
+        sending: 'Sending…',
+        consent: 'By subscribing you agree to receive occasional emails from Guest List. Unsubscribe anytime.',
+        error: 'Something went wrong. Please try again in a moment.',
+        successTitle: 'Your timeline is ready.',
+        successBody: 'Download it below and share it with your planner or coordinator.',
+        download: 'Download the timeline',
+      },
+footer: {
       kicker: 'For the nights worth remembering.',
       body: 'Luxury digital photo booth experiences for Atlanta gatherings and the people who make them matter.',
       area: 'Serving Atlanta, Buckhead, Marietta, Smyrna & surrounding areas',
@@ -173,7 +186,7 @@ const translations = {
         ['¿Se requiere un depósito?', 'Tu fecha queda reservada cuando confirmas la reserva en Cal.com. El calendario mostrará los detalles actuales del depósito y pago para el paquete elegido.'],
       ],
     },
-    lead: {
+    leadQuince: {
       title: 'Descarga Gratis: Lista de Verificación de Momentos Fotográficos de Quinceañera',
       body: 'No te pierdas ningún momento — planifica el horario de tu cabina según tu recepción, no solo tu ceremonia.',
       emailLabel: 'Correo electrónico',
@@ -186,7 +199,20 @@ const translations = {
       successBody: 'Descárgala aquí abajo y tenla a mano mientras planificas.',
       download: 'Descargar la lista',
     },
-    footer: {
+          leadWedding: {
+        title: 'Descarga Gratis: El Horario de Fotos para tu Recepción de Boda',
+        body: 'Una guía sencilla para ubicar tu cabina de fotos en el momento preciso, para que se sume a la noche en lugar de competir con ella.',
+        emailLabel: 'Correo electrónico',
+        placeholder: 'tu@correo.com',
+        submit: 'Enviarme el horario',
+        sending: 'Enviando…',
+        consent: 'Al suscribirte aceptas recibir correos ocasionales de Guest List. Puedes cancelar cuando quieras.',
+        error: 'Algo salió mal. Inténtalo de nuevo en un momento.',
+        successTitle: 'Tu horario está listo.',
+        successBody: 'Descárgalo aquí abajo y compártelo con tu wedding planner o coordinador.',
+        download: 'Descargar el horario',
+      },
+footer: {
       kicker: 'Para las noches que merecen recordarse.',
       body: 'Experiencias de fotomatón digital de lujo para las reuniones de Atlanta y las personas que las hacen importantes.',
       area: 'Sirviendo Atlanta, Buckhead, Marietta, Smyrna y zonas cercanas',
@@ -334,7 +360,6 @@ function BookingEmbed({ slug, label, fallback, loading }: { slug: string; label:
 //   3) Upload your PDF to artifacts/guest-list/public/quinceanera-checklist.pdf
 // ─────────────────────────────────────────────────────────────────────────────
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID'; // <-- PASTE YOUR FORMSPREE ENDPOINT HERE
-const CHECKLIST_PDF = '/quinceanera-checklist.pdf';
 
 type LeadCopy = {
   title: string;
@@ -350,7 +375,7 @@ type LeadCopy = {
   download: string;
 };
 
-function LeadMagnet({ copy, language }: { copy: LeadCopy; language: Language }) {
+function LeadMagnet({ copy, language, pdfPath, source }: { copy: LeadCopy; language: Language; pdfPath: string; source: string }) {
   const [email, setEmail] = useState('');
   const [honey, setHoney] = useState('');
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
@@ -367,7 +392,7 @@ function LeadMagnet({ copy, language }: { copy: LeadCopy; language: Language }) 
       const response = await fetch(FORMSPREE_ENDPOINT, {
         method: 'POST',
         headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, language, source: 'quinceanera-checklist' }),
+        body: JSON.stringify({ email, language, source }),
       });
       setStatus(response.ok ? 'success' : 'error');
     } catch {
@@ -389,7 +414,7 @@ function LeadMagnet({ copy, language }: { copy: LeadCopy; language: Language }) 
               <span className="flex h-10 w-10 items-center justify-center border border-[#c9a75d] text-[#d9b76a]"><Check size={18} /></span>
               <p className="mt-5 font-display text-3xl leading-tight text-[#f5eee2]">{copy.successTitle}</p>
               <p className="mt-3 text-[15px] leading-7 text-[#e7dcca]">{copy.successBody}</p>
-              <a href={CHECKLIST_PDF} download className="group mt-7 inline-flex items-center gap-4 bg-[#c9a75d] px-6 py-4 text-[11px] font-bold uppercase tracking-[.15em] text-[#20170e] transition hover:bg-[#ecd28f]" data-testid="link-lead-download">{copy.download}<ArrowDown size={15} /></a>
+              <a href={pdfPath} download className="group mt-7 inline-flex items-center gap-4 bg-[#c9a75d] px-6 py-4 text-[11px] font-bold uppercase tracking-[.15em] text-[#20170e] transition hover:bg-[#ecd28f]" data-testid="link-lead-download">{copy.download}<ArrowDown size={15} /></a>
             </div>
           ) : (
             <form onSubmit={(event) => { event.preventDefault(); void submit(); }} data-testid="form-lead">
@@ -409,8 +434,8 @@ function LeadMagnet({ copy, language }: { copy: LeadCopy; language: Language }) 
   );
 }
 
-function AppHome() {
-  const [language, setLanguage] = useState<Language>(() => (localStorage.getItem('guest-list-language') as Language) || 'en');
+function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; leadMagnet: 'wedding' | 'quince' }) {
+  const [language, setLanguage] = useState<Language>(() => initialLanguage || (localStorage.getItem('guest-list-language') as Language) || 'en');
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<PackageKey>('signature');
@@ -418,6 +443,9 @@ function AppHome() {
   const t = translations[language];
   const packageData = useMemo(() => packageKeys.map((key) => ({ key, ...t.packages[key] })), [t]);
   const cardData = useMemo(() => cardOrder.map((key) => ({ key, ...t.packages[key] })), [t]);
+  const leadConfig = leadMagnet === 'quince'
+    ? { copy: t.leadQuince, pdfPath: '/quinceanera-checklist.pdf', source: 'quinceanera-checklist' }
+    : { copy: t.leadWedding, pdfPath: '/wedding-reception-timeline.pdf', source: 'wedding-reception-timeline' };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 34);
@@ -533,7 +561,7 @@ function AppHome() {
         </div>
       </section>
 
-      <LeadMagnet copy={t.lead} language={language} />
+      <LeadMagnet copy={leadConfig.copy} pdfPath={leadConfig.pdfPath} source={leadConfig.source} language={language} />
 
       <section id="gallery" className="bg-[#e9e0d1] px-5 py-24 md:px-10 md:py-32">
         <div className="mx-auto max-w-[1320px]">
@@ -576,7 +604,13 @@ function AppHome() {
 }
 
 function Router() {
-  return <Switch><Route path="/" component={AppHome} /><Route component={AppHome} /></Switch>;
+  return (
+    <Switch>
+      <Route path="/es" component={() => <AppHome initialLanguage="es" leadMagnet="quince" />} />
+      <Route path="/" component={() => <AppHome leadMagnet="wedding" />} />
+      <Route component={() => <AppHome leadMagnet="wedding" />} />
+    </Switch>
+  );
 }
 
 export default function App() {

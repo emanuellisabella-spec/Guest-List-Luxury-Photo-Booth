@@ -491,7 +491,7 @@ function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; 
       </nav>
 
       <section id="top" className="relative flex min-h-[760px] items-end overflow-hidden bg-[#1c1712] pb-16 pt-36 md:min-h-[800px] md:pb-24">
-        <img src="/guest-list-hero.jpg" alt="" className="absolute inset-0 h-full w-full object-cover object-[63%] opacity-70" fetchPriority="high" />
+        <img src={leadMagnet === 'quince' ? '/hero-quinceanera.webp' : '/hero-wedding.webp'} alt="" className="absolute inset-0 h-full w-full object-cover object-[70%_30%] opacity-80" fetchPriority="high" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(24,18,13,.94)_0%,rgba(24,18,13,.64)_38%,rgba(24,18,13,.13)_100%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(24,18,13,.78)_0%,transparent_42%)]" />
         <div className="relative mx-auto w-full max-w-[1320px] px-5 md:px-10">

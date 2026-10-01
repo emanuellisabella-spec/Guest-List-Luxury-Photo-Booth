@@ -348,14 +348,6 @@ function BookingEmbed({ slug, label, fallback, loading }: { slug: string; label:
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// LEAD MAGNET — Free Quinceañera Photo Timeline Checklist
-//
-// TO GO LIVE:
-//   1) Create a free form at https://formspree.io
-//   2) Replace YOUR_FORM_ID below with your real form ID
-//      (your endpoint will look like https://formspree.io/f/xyzabcde)
-//   3) Upload your PDF to artifacts/guest-list/public/quinceanera-checklist.pdf
-// ─────────────────────────────────────────────────────────────────────────────
 // LEAD MAGNET — email capture
 //
 // The form posts to /api/subscribe (artifacts/guest-list/api/subscribe.js), a
@@ -616,9 +608,66 @@ function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; 
   );
 }
 
+const thankYouCopy = {
+  en: {
+    path: '/wedding-reception-timeline.pdf',
+    title: 'You’re on the list.',
+    body: 'Your Wedding Reception Photo Timeline is ready. Download it below and share it with your planner or coordinator.',
+    download: 'Download the timeline',
+    next: 'Planning your date?',
+    cta: 'Check availability',
+    ctaHref: '/',
+    back: '← Back to main site',
+    backHref: '/',
+  },
+  es: {
+    path: '/quinceanera-checklist.pdf',
+    title: 'Ya estás en la lista.',
+    body: 'Tu lista de horarios fotográficos para la quinceañera está lista. Descárgala aquí y guárdala mientras planeas.',
+    download: 'Descargar la lista',
+    next: '¿Ya tienes fecha?',
+    cta: 'Ver disponibilidad',
+    ctaHref: '/es',
+    back: '← Volver al sitio principal',
+    backHref: '/es',
+  },
+} as const;
+
+function ThankYou({ language }: { language: Language }) {
+  const c = thankYouCopy[language];
+  useEffect(() => {
+    document.title = language === 'es' ? 'Gracias | Guest List' : 'Thank you | Guest List';
+    const meta = document.querySelector<HTMLMetaElement>('meta[name="robots"]') ?? document.head.appendChild(Object.assign(document.createElement('meta'), { name: 'robots' }));
+    const previous = meta.content;
+    meta.content = 'noindex, follow';
+    return () => { meta.content = previous || 'index, follow'; };
+  }, [language]);
+  return (
+    <main className="flex min-h-screen flex-col bg-[#1c1712] px-5 py-10 text-[#f5eee2]" data-testid="page-thank-you">
+      <a href={c.backHref} className="flex items-center gap-3 self-start" aria-label="Guest List">
+        <span className="flex h-9 w-9 items-center justify-center border border-[#c9a75d] text-[#c9a75d]"><span className="font-display text-xl italic">G</span></span>
+        <span className="text-xs font-semibold uppercase tracking-[.28em]">Guest List</span>
+      </a>
+      <div className="mx-auto flex w-full max-w-[560px] flex-1 flex-col justify-center py-16">
+        <span className="flex h-10 w-10 items-center justify-center border border-[#c9a75d] text-[#d9b76a]"><Check size={18} /></span>
+        <h1 className="mt-6 font-display text-[clamp(2.6rem,8vw,4.4rem)] leading-[.95] tracking-[-.04em]">{c.title}</h1>
+        <p className="mt-5 text-[16px] leading-7 text-[#e7dcca]">{c.body}</p>
+        <a href={c.path} download className="group mt-8 inline-flex w-full items-center justify-between bg-[#c9a75d] px-6 py-4 text-[11px] font-bold uppercase tracking-[.15em] text-[#20170e] transition hover:bg-[#ecd28f] sm:w-auto sm:gap-8" data-testid="link-thank-you-download">{c.download}<ArrowDown size={15} /></a>
+        <div className="mt-12 border-t border-[#6b5737] pt-6">
+          <p className="font-mono-brand text-[10px] uppercase tracking-[.2em] text-[#d9b76a]">{c.next}</p>
+          <a href={c.ctaHref} className="mt-3 inline-flex items-center gap-2 border-b border-[#c9a75d] pb-1 text-xs font-semibold uppercase tracking-[.14em] transition hover:text-[#d9b76a]">{c.cta} <ArrowUpRight size={13} /></a>
+        </div>
+      </div>
+      <a href={c.backHref} className="self-start text-[10px] uppercase tracking-[.16em] text-[#bcae98] transition hover:text-[#d9b76a]">{c.back}</a>
+    </main>
+  );
+}
+
 function Router() {
   return (
     <Switch>
+      <Route path="/thank-you" component={() => <ThankYou language="en" />} />
+      <Route path="/gracias" component={() => <ThankYou language="es" />} />
       <Route path="/es" component={() => <AppHome initialLanguage="es" leadMagnet="quince" />} />
       <Route path="/" component={() => <AppHome leadMagnet="wedding" />} />
       <Route component={() => <AppHome leadMagnet="wedding" />} />

@@ -440,6 +440,15 @@ function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; 
   const [scrolled, setScrolled] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<PackageKey>('signature');
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [activePackage, setActivePackage] = useState(0);
+  const packageRowRef = useRef<HTMLDivElement>(null);
+  const onPackageScroll = () => {
+    const row = packageRowRef.current;
+    const first = row?.firstElementChild as HTMLElement | null;
+    if (!row || !first) return;
+    const step = first.offsetWidth + 12;
+    setActivePackage(Math.min(cardOrder.length - 1, Math.max(0, Math.round(row.scrollLeft / step))));
+  };
   const t = translations[language];
   const packageData = useMemo(() => packageKeys.map((key) => ({ key, ...t.packages[key] })), [t]);
   const cardData = useMemo(() => cardOrder.map((key) => ({ key, ...t.packages[key] })), [t]);
@@ -540,25 +549,28 @@ function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; 
         </div>
       </section>
 
-      <section id="packages" className="bg-[#292017] px-5 py-24 text-[#f2e9da] md:px-10 md:py-32">
+      <section id="packages" className="bg-[#292017] px-5 py-12 text-[#f2e9da] md:px-10 md:py-32">
         <div className="mx-auto max-w-[1320px]">
-          <div className="mb-14 flex flex-col justify-between gap-8 md:flex-row md:items-end">
-            <div><p className="font-mono-brand text-[10px] uppercase tracking-[.22em] text-[#d9b76a]">{t.packages.label}</p><h2 className="mt-6 whitespace-pre-line font-display text-[clamp(3.1rem,7vw,6.6rem)] leading-[.9] tracking-[-.05em]">{t.packages.title}</h2></div>
+          <div className="mb-7 flex flex-col justify-between gap-4 md:mb-14 md:flex-row md:items-end md:gap-8">
+            <div><p className="font-mono-brand text-[10px] uppercase tracking-[.22em] text-[#d9b76a]">{t.packages.label}</p><h2 className="mt-4 whitespace-pre-line font-display text-[clamp(2.3rem,7vw,6.6rem)] leading-[.92] tracking-[-.05em] md:mt-6">{t.packages.title}</h2></div>
             <p className="max-w-[310px] text-sm leading-6 text-[#cbbda7]">{t.packages.body}</p>
           </div>
-          <div className="grid gap-4 lg:grid-cols-3">
-            {cardData.map((item, index) => <article key={item.key} className={`relative flex flex-col border p-6 transition-transform duration-300 hover:-translate-y-1 md:p-8 ${item.key === 'signature' ? 'border-[#c9a75d] bg-[#453722]' : 'border-[#69583e] bg-[#32271b]'}`} data-testid={`card-package-${item.key}`}>
+          <div ref={packageRowRef} onScroll={onPackageScroll} className="-mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:-mx-10 md:px-10 lg:mx-0 lg:grid lg:grid-cols-3 lg:gap-4 lg:overflow-visible lg:px-0 lg:pb-0" data-testid="package-carousel">
+            {cardData.map((item, index) => <article key={item.key} className={`relative flex w-[84%] shrink-0 snap-center flex-col border p-5 transition-transform duration-300 hover:-translate-y-1 sm:w-[55%] md:p-8 lg:w-auto ${item.key === 'signature' ? 'border-[#c9a75d] bg-[#453722]' : 'border-[#69583e] bg-[#32271b]'}`} data-testid={`card-package-${item.key}`}>
               {item.key === 'signature' && <span className="absolute right-5 top-5 font-mono-brand text-[9px] uppercase tracking-[.18em] text-[#d9b76a]">{t.packages.popular}</span>}
               <p className="font-mono-brand text-[10px] uppercase tracking-[.2em] text-[#bca885]">0{index + 1}</p>
-              <h3 className="mt-12 font-display text-4xl tracking-[-.03em]">{item.name}</h3>
-              <p className="mt-4 min-h-[72px] text-sm leading-6 text-[#d5c8b5]">{item.description}</p>
-              <div className="mt-7 flex items-end gap-3 border-b border-[#756347] pb-6"><span className="font-display text-4xl">{item.price}</span><span className="mb-1 font-mono-brand text-[9px] uppercase tracking-[.13em] text-[#bca885]">{item.duration}</span></div>
-              <p className="mt-6 font-mono-brand text-[9px] uppercase tracking-[.19em] text-[#d9b76a]">{t.packages.included}</p>
-              <ul className="mt-4 flex flex-1 flex-col gap-3">{item.items.map((include) => <li key={include} className="flex gap-3 text-sm text-[#e4d9c7]"><Check size={15} className="mt-0.5 shrink-0 text-[#c9a75d]" />{include}</li>)}</ul>
-              <button onClick={() => choosePackage(item.key)} className="mt-9 flex w-full items-center justify-between border border-[#c9a75d] px-5 py-4 text-[10px] font-bold uppercase tracking-[.17em] text-[#e9d7af] transition hover:bg-[#c9a75d] hover:text-[#292017]" data-testid={`button-book-${item.key}`}>{t.packages.book}<ArrowUpRight size={15} /></button>
+              <h3 className="mt-6 font-display text-3xl tracking-[-.03em] md:mt-12 md:text-4xl">{item.name}</h3>
+              <p className="mt-3 text-[13px] leading-5 text-[#d5c8b5] md:mt-4 md:min-h-[72px] md:text-sm md:leading-6">{item.description}</p>
+              <div className="mt-4 flex items-end gap-3 border-b border-[#756347] pb-4 md:mt-7 md:pb-6"><span className="font-display text-4xl">{item.price}</span><span className="mb-1 font-mono-brand text-[9px] uppercase tracking-[.13em] text-[#bca885]">{item.duration}</span></div>
+              <p className="mt-4 font-mono-brand text-[9px] uppercase tracking-[.19em] text-[#d9b76a] md:mt-6">{t.packages.included}</p>
+              <ul className="mt-3 flex flex-1 flex-col gap-2 md:mt-4 md:gap-3">{item.items.map((include) => <li key={include} className="flex gap-2.5 text-[13px] leading-5 text-[#e4d9c7] md:gap-3 md:text-sm"><Check size={15} className="mt-0.5 shrink-0 text-[#c9a75d]" />{include}</li>)}</ul>
+              <button onClick={() => choosePackage(item.key)} className="mt-6 flex w-full items-center justify-between border border-[#c9a75d] px-5 py-3.5 md:mt-9 md:py-4 text-[10px] font-bold uppercase tracking-[.17em] text-[#e9d7af] transition hover:bg-[#c9a75d] hover:text-[#292017]" data-testid={`button-book-${item.key}`}>{t.packages.book}<ArrowUpRight size={15} /></button>
             </article>)}
           </div>
-          <p className="mt-7 text-center font-mono-brand text-[9px] uppercase tracking-[.15em] text-[#a59479]">{t.packages.note}</p>
+          <div className="mt-4 flex items-center justify-center gap-2 lg:hidden" aria-hidden="true">
+            {cardData.map((item, index) => <span key={item.key} className={`h-1.5 rounded-full transition-all ${index === activePackage ? 'w-5 bg-[#c9a75d]' : 'w-1.5 bg-[#69583e]'}`} />)}
+          </div>
+          <p className="mt-5 text-center font-mono-brand text-[9px] uppercase tracking-[.15em] text-[#a59479] md:mt-7">{t.packages.note}</p>
         </div>
       </section>
 

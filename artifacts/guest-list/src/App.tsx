@@ -10,15 +10,16 @@ const translations = {
     nav: { about: 'The experience', packages: 'Packages', gallery: 'In the wild', faq: 'FAQ', book: 'Book your date', language: 'ES' },
     hero: {
       title: 'The guest list\nstarts here.',
-      body: 'Sleek iPad photo booth kiosk rentals designed to blend seamlessly into your event and capture the moments your guests will replay.',
+      body: 'Sleek iPad photo booth rentals designed to blend seamlessly into your event and capture the moments your guests will replay.',
       primary: 'Check availability',
       secondary: 'How it works',
     },
     about: {
-      label: 'More than a photo booth',
-      title: 'A little black box\nof instant joy.',
-      body: 'Guest List brings the energy of the room into focus. Our sleek iPad setup slips beautifully into your celebration, then turns every laugh, toast and late-night dance into a shareable keepsake.',
-      detail: 'Curated in Atlanta for weddings, brand events, birthdays and every reason worth gathering.',
+      label: 'The booth',
+      title: 'A sleek white kiosk,\nbuilt for your guests.',
+      body: 'Our white iPad kiosk and soft ring light stand tall without taking over the room. Guests walk up, tap the screen, strike a pose and leave with a photo they can share before the night is over.',
+      detail: 'Delivered, set up and taken down for you at weddings, quinceañeras, corporate events and birthdays across Atlanta.',
+      imageAlt: 'Guests using the white Guest List iPad photo booth kiosk at an event',
       stat1: '01', stat1Label: 'Set up with intention',
       stat2: '02', stat2Label: 'Capture without interrupting',
       stat3: '03', stat3Label: 'Share before the night is over',
@@ -116,15 +117,16 @@ footer: {
     nav: { about: 'La experiencia', packages: 'Paquetes', gallery: 'Galería', faq: 'Preguntas', book: 'Reserva tu fecha', language: 'EN' },
     hero: {
       title: 'La lista de invitados\nempieza aquí.',
-      body: 'Alquiler de fotomatones iPad en kiosco, elegantes y diseñados para integrarse a tu evento y capturar los momentos que tus invitados querrán revivir.',
+      body: 'Alquiler de fotomatones iPad elegantes, diseñados para integrarse a tu evento y capturar los momentos que tus invitados querrán revivir.',
       primary: 'Ver paquetes',
       secondary: 'Cómo funciona',
     },
     about: {
-      label: 'Más que un fotomatón',
-      title: 'Una pequeña caja negra\nde alegría instantánea.',
-      body: 'Guest List convierte la energía de tu evento en recuerdos. Nuestro elegante iPad se integra en tu celebración y transforma cada risa, brindis y baile en un recuerdo para compartir.',
-      detail: 'Creado en Atlanta para bodas, eventos de marca, cumpleaños y cada motivo que merece reunirse.',
+      label: 'El fotomatón',
+      title: 'Un kiosco blanco\ny elegante, para tus invitados.',
+      body: 'Nuestro kiosco blanco con iPad y aro de luz suave se luce sin robarse el salón. Tus invitados se acercan, tocan la pantalla, posan y se llevan una foto lista para compartir antes de que termine la noche.',
+      detail: 'Lo entregamos, instalamos y recogemos por ti en bodas, quinceañeras, eventos corporativos y cumpleaños en todo Atlanta.',
+      imageAlt: 'Invitados usando el fotomatón iPad blanco de Guest List en un evento',
       stat1: '01', stat1Label: 'Montaje con intención',
       stat2: '02', stat2Label: 'Captura sin interrumpir',
       stat3: '03', stat3Label: 'Comparte antes de que termine la noche',
@@ -310,7 +312,7 @@ function BookingEmbed({ slug, label, fallback, loading }: { slug: string; label:
         calLink: `guestlistbooth/${slug}`,
       });
       namespace('ui', {
-        hideEventTypeDetails: false,
+        hideEventTypeDetails: true,
         layout: 'month_view',
         theme: 'light',
         styles: { branding: { brandColor: '#C9A24B' } },
@@ -328,8 +330,8 @@ function BookingEmbed({ slug, label, fallback, loading }: { slug: string; label:
     };
   }, [slug]);
   return (
-    <div className="relative min-h-[430px] overflow-hidden border border-[#d7c8a7] bg-[#f7f1e6]">
-      <div ref={embedRef} className="min-h-[430px]" data-testid="cal-embed-selected" />
+    <div className="relative min-h-[300px] max-w-[640px] overflow-hidden border border-[#d7c8a7] bg-[#f7f1e6]">
+      <div ref={embedRef} className="min-h-[300px]" data-testid="cal-embed-selected" />
       <div className={`pointer-events-none absolute inset-0 flex items-center justify-center bg-[#f7f1e6]/90 transition-opacity duration-500 ${ready ? 'opacity-0' : 'opacity-100'}`}>
         <div className="text-center">
           <div className="mx-auto mb-4 h-8 w-8 animate-pulse rounded-full border border-[#b89044] border-t-transparent" />
@@ -351,7 +353,13 @@ function BookingEmbed({ slug, label, fallback, loading }: { slug: string; label:
 //      (your endpoint will look like https://formspree.io/f/xyzabcde)
 //   3) Upload your PDF to artifacts/guest-list/public/quinceanera-checklist.pdf
 // ─────────────────────────────────────────────────────────────────────────────
-const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID'; // <-- PASTE YOUR FORMSPREE ENDPOINT HERE
+// LEAD MAGNET — email capture
+//
+// The form posts to /api/subscribe (artifacts/guest-list/api/subscribe.ts), a
+// serverless function that adds the person to the Zoho Campaigns email list with
+// their Source and Language. See that file for the env vars it needs.
+// ─────────────────────────────────────────────────────────────────────────────
+const SUBSCRIBE_ENDPOINT = '/api/subscribe';
 
 type LeadCopy = {
   title: string;
@@ -381,10 +389,10 @@ function LeadMagnet({ copy, language, pdfPath, source }: { copy: LeadCopy; langu
     }
     setStatus('sending');
     try {
-      const response = await fetch(FORMSPREE_ENDPOINT, {
+      const response = await fetch(SUBSCRIBE_ENDPOINT, {
         method: 'POST',
         headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, language, source }),
+        body: JSON.stringify({ email, language, source, website: honey }),
       });
       setStatus(response.ok ? 'success' : 'error');
     } catch {
@@ -500,13 +508,13 @@ function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; 
         </div>
       </section>
 
-      <section id="booking" className="bg-[#f0eadf] px-5 py-24 md:px-10 md:py-32">
+      <section id="booking" className="bg-[#f0eadf] px-5 py-12 md:px-10 md:py-16">
         <div className="mx-auto max-w-[1160px]">
-          <div className="grid gap-12 md:grid-cols-[.7fr_1.3fr] md:gap-24">
-            <div><p className="font-mono-brand text-[10px] uppercase tracking-[.22em] text-[#9a6e22]">{t.booking.label}</p><h2 className="mt-6 font-display text-[clamp(3.5rem,6vw,6rem)] leading-[.88] tracking-[-.05em] text-[#30251a]">{t.booking.title}</h2><p className="mt-7 max-w-[310px] text-sm leading-6 text-[#665845]">{t.booking.body}</p></div>
+          <div className="grid gap-8 md:grid-cols-[.6fr_1.4fr] md:gap-14">
+            <div><p className="font-mono-brand text-[10px] uppercase tracking-[.22em] text-[#9a6e22]">{t.booking.label}</p><h2 className="mt-4 font-display text-[clamp(2.6rem,4.2vw,3.8rem)] leading-[.9] tracking-[-.05em] text-[#30251a]">{t.booking.title}</h2><p className="mt-4 max-w-[310px] text-sm leading-6 text-[#665845]">{t.booking.body}</p></div>
             <div>
-              <div className="mb-6 flex flex-wrap border-b border-[#ccbda4]" role="tablist" aria-label={t.booking.selected}>
-                {packageData.map((item) => <button key={item.key} role="tab" aria-selected={selectedPackage === item.key} onClick={() => setSelectedPackage(item.key)} className={`relative px-3 py-4 text-[10px] font-bold uppercase tracking-[.12em] transition first:pl-0 sm:px-5 ${selectedPackage === item.key ? 'text-[#9a6e22]' : 'text-[#8a7a63] hover:text-[#30251a]'}`} data-testid={`tab-package-${item.key}`}>{item.name}{selectedPackage === item.key && <span className="absolute inset-x-3 -bottom-px h-0.5 bg-[#b89044] first:inset-x-0 sm:inset-x-5" />}</button>)}
+              <div className="mb-3 flex max-w-[640px] flex-wrap border-b border-[#ccbda4]" role="tablist" aria-label={t.booking.selected}>
+                {packageData.map((item) => <button key={item.key} role="tab" aria-selected={selectedPackage === item.key} onClick={() => setSelectedPackage(item.key)} className={`relative px-3 py-3 text-[10px] font-bold uppercase tracking-[.12em] transition first:pl-0 sm:px-5 ${selectedPackage === item.key ? 'text-[#9a6e22]' : 'text-[#8a7a63] hover:text-[#30251a]'}`} data-testid={`tab-package-${item.key}`}>{item.name}{selectedPackage === item.key && <span className="absolute inset-x-3 -bottom-px h-0.5 bg-[#b89044] first:inset-x-0 sm:inset-x-5" />}</button>)}
               </div>
               <BookingEmbed slug={slugs[selectedPackage]} label={t.booking.selected} fallback={t.booking.fallback} loading={t.booking.loading} />
             </div>
@@ -519,9 +527,10 @@ function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; 
           <div>
             <p className="font-mono-brand text-[10px] uppercase tracking-[.22em] text-[#9a6e22]">{t.about.label}</p>
             <div className="mt-7 h-px w-16 bg-[#b89044]" />
+            <figure className="mt-8 aspect-[4/5] max-w-[440px] overflow-hidden bg-[#e4dccb]"><img loading="lazy" src={leadMagnet === 'quince' ? '/hero-wedding.webp' : '/hero-quinceanera.webp'} alt={t.about.imageAlt} className={`h-full w-full object-cover ${leadMagnet === 'quince' ? 'object-[100%_50%]' : 'object-[78%_40%]'}`} /></figure>
           </div>
           <div>
-            <h2 className="max-w-[700px] whitespace-pre-line font-display text-[clamp(3.2rem,7vw,6.4rem)] leading-[.92] tracking-[-.045em] text-[#30251a]">{t.about.title}</h2>
+            <h2 className="max-w-[700px] whitespace-pre-line font-display text-[clamp(2.8rem,5.2vw,5rem)] leading-[.95] tracking-[-.045em] text-[#30251a]">{t.about.title}</h2>
             <p className="mt-9 max-w-[620px] text-lg leading-8 text-[#665845]">{t.about.body}</p>
             <p className="mt-6 max-w-[580px] font-display text-xl italic leading-8 text-[#9a6e22]">{t.about.detail}</p>
             <div className="mt-14 grid gap-7 border-t border-[#ccbda4] pt-7 sm:grid-cols-3">

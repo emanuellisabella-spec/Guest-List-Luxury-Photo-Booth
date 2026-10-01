@@ -80,7 +80,11 @@ const translations = {
       placeholder: 'you@email.com',
       submit: 'Send me the checklist',
       sending: 'Sending…',
-      consent: 'By subscribing you agree to receive occasional emails from Guest List. Unsubscribe anytime.',
+      consentBefore: 'I agree to the ',
+      privacyLabel: 'Privacy Policy',
+      consentMid: ' and ',
+      termsLabel: 'Terms of Use',
+      consentAfter: ', and I consent to receive occasional emails from Guest List. I can unsubscribe at any time.',
       error: 'Something went wrong. Please try again in a moment.',
       successTitle: 'Your checklist is ready.',
       successBody: 'Download it below and keep it handy while you plan.',
@@ -95,7 +99,11 @@ const translations = {
         placeholder: 'you@email.com',
         submit: 'Send me the timeline',
         sending: 'Sending…',
-        consent: 'By subscribing you agree to receive occasional emails from Guest List. Unsubscribe anytime.',
+        consentBefore: 'I agree to the ',
+        privacyLabel: 'Privacy Policy',
+        consentMid: ' and ',
+        termsLabel: 'Terms of Use',
+        consentAfter: ', and I consent to receive occasional emails from Guest List. I can unsubscribe at any time.',
         error: 'Something went wrong. Please try again in a moment.',
         successTitle: 'Your timeline is ready.',
         successBody: 'Download it below and share it with your planner or coordinator.',
@@ -189,7 +197,11 @@ footer: {
       placeholder: 'tu@correo.com',
       submit: 'Enviarme la lista',
       sending: 'Enviando…',
-      consent: 'Al suscribirte aceptas recibir correos ocasionales de Guest List. Puedes cancelar cuando quieras.',
+      consentBefore: 'Acepto la ',
+      privacyLabel: 'Política de Privacidad',
+      consentMid: ' y los ',
+      termsLabel: 'Términos de Uso',
+      consentAfter: ', y doy mi consentimiento para recibir correos ocasionales de Guest List. Puedo darme de baja en cualquier momento.',
       error: 'Algo salió mal. Inténtalo de nuevo en un momento.',
       successTitle: 'Tu lista está lista.',
       successBody: 'Descárgala aquí abajo y tenla a mano mientras planificas.',
@@ -204,7 +216,11 @@ footer: {
         placeholder: 'tu@correo.com',
         submit: 'Enviarme el horario',
         sending: 'Enviando…',
-        consent: 'Al suscribirte aceptas recibir correos ocasionales de Guest List. Puedes cancelar cuando quieras.',
+        consentBefore: 'Acepto la ',
+        privacyLabel: 'Política de Privacidad',
+        consentMid: ' y los ',
+        termsLabel: 'Términos de Uso',
+        consentAfter: ', y doy mi consentimiento para recibir correos ocasionales de Guest List. Puedo darme de baja en cualquier momento.',
         error: 'Algo salió mal. Inténtalo de nuevo en un momento.',
         successTitle: 'Tu horario está listo.',
         successBody: 'Descárgalo aquí abajo y compártelo con tu wedding planner o coordinador.',
@@ -431,7 +447,11 @@ type LeadCopy = {
   placeholder: string;
   submit: string;
   sending: string;
-  consent: string;
+  consentBefore: string;
+  privacyLabel: string;
+  consentMid: string;
+  termsLabel: string;
+  consentAfter: string;
   error: string;
   successTitle: string;
   successBody: string;
@@ -442,11 +462,12 @@ function LeadMagnet({ copy, language, pdfPath, source }: { copy: LeadCopy; langu
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [agreed, setAgreed] = useState(false);
   const [honey, setHoney] = useState('');
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
   const submit = async () => {
-    if (status === 'sending') return;
+    if (status === 'sending' || !agreed) return;
     // Bots tend to fill the hidden field; quietly ignore them.
     if (honey) {
       setStatus('success');
@@ -499,12 +520,15 @@ function LeadMagnet({ copy, language, pdfPath, source }: { copy: LeadCopy; langu
                 <label htmlFor="lead-email" className="font-mono-brand text-[10px] uppercase tracking-[.2em] text-[#d9b76a]">{copy.emailLabel}</label>
                 <input id="lead-email" name="email" type="email" required autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder={copy.placeholder} className="mt-3 w-full border border-[#c9a75d]/50 bg-transparent px-4 py-4 text-[15px] text-[#f5eee2] outline-none transition placeholder:text-[#8f826d] focus:border-[#ecd28f]" data-testid="input-lead-email" />
               </div>
+              <label className="mt-5 flex cursor-pointer items-start gap-3 text-xs leading-5 text-[#cbbda7]">
+                <input type="checkbox" name="consent" required checked={agreed} onChange={(event) => setAgreed(event.target.checked)} className="mt-0.5 h-4 w-4 shrink-0 accent-[#c9a75d]" data-testid="checkbox-lead-consent" />
+                <span>{copy.consentBefore}<a href="/privacy" target="_blank" rel="noopener noreferrer" className="underline decoration-[#c9a75d]/60 underline-offset-2 hover:text-[#ecd28f]">{copy.privacyLabel}</a>{copy.consentMid}<a href="/terms" target="_blank" rel="noopener noreferrer" className="underline decoration-[#c9a75d]/60 underline-offset-2 hover:text-[#ecd28f]">{copy.termsLabel}</a>{copy.consentAfter}</span>
+              </label>
               <div className="hidden" aria-hidden="true">
                 <label>Leave this field empty<input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" value={honey} onChange={(event) => setHoney(event.target.value)} /></label>
               </div>
               <button type="submit" disabled={status === 'sending'} className="mt-4 inline-flex w-full items-center justify-center bg-[#c9a75d] px-6 py-4 text-[11px] font-bold uppercase tracking-[.15em] text-[#20170e] transition hover:bg-[#ecd28f] disabled:cursor-wait disabled:opacity-60" data-testid="button-lead-submit">{status === 'sending' ? copy.sending : copy.submit}</button>
               {status === 'error' ? <p role="alert" className="mt-4 text-sm leading-6 text-[#e9b7a3]">{copy.error}</p> : null}
-              <p className="mt-4 text-xs leading-5 text-[#9c8f79]">{copy.consent}</p>
             </form>
           )}
         </div>

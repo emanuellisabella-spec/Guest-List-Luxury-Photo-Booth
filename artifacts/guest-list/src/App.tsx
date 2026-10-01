@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowDown, ArrowUpRight, Check, ChevronDown, Instagram, Menu, Music2, Play, Sparkles, X } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, Check, ChevronDown, Instagram, Menu, Music2, Sparkles, X } from 'lucide-react';
 import { Route, Switch } from 'wouter';
 
 type Language = 'en' | 'es';
@@ -9,12 +9,10 @@ const translations = {
   en: {
     nav: { about: 'The experience', packages: 'Packages', gallery: 'In the wild', faq: 'FAQ', book: 'Book your date', language: 'ES' },
     hero: {
-      eyebrow: 'Atlanta • iPad photo booth rental',
       title: 'The guest list\nstarts here.',
-      body: 'A digital photo booth that feels like part of the party — not an afterthought. Designed for the moments your people will replay.',
+      body: 'Sleek iPad photo booth kiosk rentals designed to blend seamlessly into your event and capture the moments your guests will replay.',
       primary: 'Check availability',
       secondary: 'How it works',
-      scroll: 'Scroll to explore',
     },
     about: {
       label: 'More than a photo booth',
@@ -56,7 +54,6 @@ const translations = {
       fallback: 'Open booking in a new tab',
       selected: 'Selected package',
       loading: 'Loading availability',
-      note: 'You are booking a complimentary date check — no payment is required here.',
     },
     testimonial: {
       quote: 'Guest List was the one detail everyone kept talking about. It looked beautiful, it was incredibly easy, and we got to relive the whole night the next morning.',
@@ -65,7 +62,6 @@ const translations = {
       label: 'From the guest book',
     },
     faq: {
-      label: 'Good to know',
       title: 'Questions, answered.',
       items: [
         ['What areas do you serve?', 'We are based in Atlanta and serve the greater metro area, including Buckhead, Midtown, Decatur, Marietta, Alpharetta and surrounding venues. A travel fee may apply outside our core service area.'],
@@ -119,12 +115,10 @@ footer: {
   es: {
     nav: { about: 'La experiencia', packages: 'Paquetes', gallery: 'Galería', faq: 'Preguntas', book: 'Reserva tu fecha', language: 'EN' },
     hero: {
-      eyebrow: 'Atlanta • alquiler de fotomatón iPad',
       title: 'La lista de invitados\nempieza aquí.',
-      body: 'Un fotomatón digital que se siente parte de la fiesta. Diseñado para esos momentos que tus invitados volverán a disfrutar.',
+      body: 'Alquiler de fotomatones iPad en kiosco, elegantes y diseñados para integrarse a tu evento y capturar los momentos que tus invitados querrán revivir.',
       primary: 'Ver paquetes',
       secondary: 'Cómo funciona',
-      scroll: 'Desplázate para explorar',
     },
     about: {
       label: 'Más que un fotomatón',
@@ -166,7 +160,6 @@ footer: {
       fallback: 'Abrir reserva en una nueva pestaña',
       selected: 'Paquete seleccionado',
       loading: 'Cargando disponibilidad',
-      note: 'Esta es una consulta de fecha sin compromiso — no se requiere pago aquí.',
     },
     testimonial: {
       quote: 'Guest List fue el detalle del que todos hablaban. Se veía increíble, fue muy fácil y pudimos revivir toda la noche a la mañana siguiente.',
@@ -175,7 +168,6 @@ footer: {
       label: 'Del libro de invitados',
     },
     faq: {
-      label: 'Para saber',
       title: 'Preguntas frecuentes.',
       items: [
         ['¿Qué zonas cubren?', 'Estamos en Atlanta y servimos el área metropolitana, incluyendo Buckhead, Midtown, Decatur, Marietta, Alpharetta y lugares cercanos. Puede aplicarse un cargo de viaje fuera de nuestra zona principal.'],
@@ -496,22 +488,22 @@ function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; 
         <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(24,18,13,.78)_0%,transparent_42%)]" />
         <div className="relative mx-auto w-full max-w-[1320px] px-5 md:px-10">
           <div className="max-w-[680px]">
-            <p className="reveal font-mono-brand text-[10px] uppercase tracking-[.25em] text-[#d9b76a]" data-testid="text-hero-eyebrow">{t.hero.eyebrow}</p>
-            <h1 className="reveal reveal-delay-1 mt-5 whitespace-pre-line font-display text-[clamp(4rem,12vw,9.5rem)] leading-[.87] tracking-[-.055em] text-[#f5eee2]" data-testid="text-hero-title">{t.hero.title}</h1>
+            
+            <h1 className="reveal reveal-delay-1 whitespace-pre-line font-display text-[clamp(4rem,12vw,9.5rem)] leading-[.87] tracking-[-.055em] text-[#f5eee2]" data-testid="text-hero-title">{t.hero.title}</h1>
             <p className="reveal reveal-delay-2 mt-7 max-w-[480px] text-[15px] leading-7 text-[#e7dcca] md:text-[17px]">{t.hero.body}</p>
             <div className="reveal reveal-delay-3 mt-9 flex flex-wrap items-center gap-5">
               <button onClick={() => jump('booking')} className="group inline-flex items-center gap-4 bg-[#c9a75d] px-6 py-4 text-[11px] font-bold uppercase tracking-[.15em] text-[#20170e] transition hover:bg-[#ecd28f]" data-testid="button-hero-packages">{t.hero.primary}<ArrowDown size={15} className="transition-transform group-hover:translate-y-1" /></button>
               <button onClick={() => jump('experience')} className="inline-flex items-center gap-2 border-b border-[#c9a75d] pb-1 text-[11px] font-semibold uppercase tracking-[.16em] text-[#f6ecdb] transition hover:text-[#d9b76a]" data-testid="button-hero-experience">{t.hero.secondary}<ArrowUpRight size={14} /></button>
             </div>
           </div>
-          <p className="absolute bottom-0 right-5 hidden rotate-90 origin-bottom-right font-mono-brand text-[9px] uppercase tracking-[.24em] text-[#e6d8bf]/70 md:block">{t.hero.scroll} &nbsp; — &nbsp;  ATL / 33.7490° N</p>
+          
         </div>
       </section>
 
       <section id="booking" className="bg-[#f0eadf] px-5 py-24 md:px-10 md:py-32">
         <div className="mx-auto max-w-[1160px]">
           <div className="grid gap-12 md:grid-cols-[.7fr_1.3fr] md:gap-24">
-            <div><p className="font-mono-brand text-[10px] uppercase tracking-[.22em] text-[#9a6e22]">{t.booking.label}</p><h2 className="mt-6 font-display text-[clamp(3.5rem,6vw,6rem)] leading-[.88] tracking-[-.05em] text-[#30251a]">{t.booking.title}</h2><p className="mt-7 max-w-[310px] text-sm leading-6 text-[#665845]">{t.booking.body}</p><div className="mt-10 flex items-start gap-3 border-t border-[#ccbda4] pt-5 text-xs leading-5 text-[#665845]"><Play size={13} className="mt-1 shrink-0 fill-[#b89044] text-[#b89044]" />{t.booking.note}</div></div>
+            <div><p className="font-mono-brand text-[10px] uppercase tracking-[.22em] text-[#9a6e22]">{t.booking.label}</p><h2 className="mt-6 font-display text-[clamp(3.5rem,6vw,6rem)] leading-[.88] tracking-[-.05em] text-[#30251a]">{t.booking.title}</h2><p className="mt-7 max-w-[310px] text-sm leading-6 text-[#665845]">{t.booking.body}</p></div>
             <div>
               <div className="mb-6 flex flex-wrap border-b border-[#ccbda4]" role="tablist" aria-label={t.booking.selected}>
                 {packageData.map((item) => <button key={item.key} role="tab" aria-selected={selectedPackage === item.key} onClick={() => setSelectedPackage(item.key)} className={`relative px-3 py-4 text-[10px] font-bold uppercase tracking-[.12em] transition first:pl-0 sm:px-5 ${selectedPackage === item.key ? 'text-[#9a6e22]' : 'text-[#8a7a63] hover:text-[#30251a]'}`} data-testid={`tab-package-${item.key}`}>{item.name}{selectedPackage === item.key && <span className="absolute inset-x-3 -bottom-px h-0.5 bg-[#b89044] first:inset-x-0 sm:inset-x-5" />}</button>)}
@@ -586,7 +578,7 @@ function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; 
       </section>
 
       <section id="faq" className="bg-[#ded2bf] px-5 py-24 md:px-10 md:py-32">
-        <div className="mx-auto grid max-w-[1160px] gap-14 md:grid-cols-[.75fr_1.25fr] md:gap-24"><div><p className="font-mono-brand text-[10px] uppercase tracking-[.22em] text-[#9a6e22]">{t.faq.label}</p><h2 className="mt-6 font-display text-[clamp(3.3rem,6vw,6rem)] leading-[.89] tracking-[-.05em] text-[#30251a]">{t.faq.title}</h2></div><div>{t.faq.items.map(([question, answer], index) => <div key={question} className="border-t border-[#bcae98] last:border-b"><button onClick={() => setOpenFaq(openFaq === index ? null : index)} className="flex w-full items-center justify-between gap-5 py-6 text-left text-sm font-semibold text-[#30251a]" aria-expanded={openFaq === index} data-testid={`button-faq-${index}`}><span>{question}</span><ChevronDown size={17} className={`shrink-0 text-[#9a6e22] transition-transform ${openFaq === index ? 'rotate-180' : ''}`} /></button><div className={`grid transition-[grid-template-rows,opacity] duration-300 ${openFaq === index ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}><p className="overflow-hidden pb-6 pr-10 text-sm leading-6 text-[#665845]">{answer}</p></div></div>)}</div></div>
+        <div className="mx-auto grid max-w-[1160px] gap-14 md:grid-cols-[.75fr_1.25fr] md:gap-24"><div><h2 className="font-display text-[clamp(3.3rem,6vw,6rem)] leading-[.89] tracking-[-.05em] text-[#30251a]">{t.faq.title}</h2></div><div>{t.faq.items.map(([question, answer], index) => <div key={question} className="border-t border-[#bcae98] last:border-b"><button onClick={() => setOpenFaq(openFaq === index ? null : index)} className="flex w-full items-center justify-between gap-5 py-6 text-left text-sm font-semibold text-[#30251a]" aria-expanded={openFaq === index} data-testid={`button-faq-${index}`}><span>{question}</span><ChevronDown size={17} className={`shrink-0 text-[#9a6e22] transition-transform ${openFaq === index ? 'rotate-180' : ''}`} /></button><div className={`grid transition-[grid-template-rows,opacity] duration-300 ${openFaq === index ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}><p className="overflow-hidden pb-6 pr-10 text-sm leading-6 text-[#665845]">{answer}</p></div></div>)}</div></div>
       </section>
 
       <footer className="bg-[#1c1712] px-5 pb-7 pt-20 text-[#f0e7d8] md:px-10 md:pt-28">

@@ -315,7 +315,7 @@ function BookingEmbed({ slug, label, fallback, loading }: { slug: string; label:
         calLink: `guestlistbooth/${slug}`,
       });
       namespace('ui', {
-        hideEventTypeDetails: true,
+        hideEventTypeDetails: false,
         layout: 'month_view',
         theme: 'light',
         styles: { branding: { brandColor: '#C9A24B' } },
@@ -333,8 +333,8 @@ function BookingEmbed({ slug, label, fallback, loading }: { slug: string; label:
     };
   }, [slug]);
   return (
-    <div className="relative min-h-[300px] max-w-[640px] overflow-hidden border border-[#d7c8a7] bg-[#f7f1e6]">
-      <div ref={embedRef} className="min-h-[300px]" data-testid="cal-embed-selected" />
+    <div className="relative min-h-[420px] overflow-hidden border border-[#d7c8a7] bg-[#f7f1e6]">
+      <div ref={embedRef} className="min-h-[420px]" data-testid="cal-embed-selected" />
       <div className={`pointer-events-none absolute inset-0 flex items-center justify-center bg-[#f7f1e6]/90 transition-opacity duration-500 ${ready ? 'opacity-0' : 'opacity-100'}`}>
         <div className="text-center">
           <div className="mx-auto mb-4 h-8 w-8 animate-pulse rounded-full border border-[#b89044] border-t-transparent" />
@@ -522,10 +522,10 @@ function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; 
 
       <section id="booking" className="bg-[#f0eadf] px-5 py-12 md:px-10 md:py-16">
         <div className="mx-auto max-w-[1160px]">
-          <div className="grid gap-8 md:grid-cols-[.6fr_1.4fr] md:gap-14">
+          <div className="grid gap-8 md:grid-cols-[.4fr_1.6fr] md:gap-12">
             <div><p className="font-mono-brand text-[10px] uppercase tracking-[.22em] text-[#9a6e22]">{t.booking.label}</p><h2 className="mt-4 font-display text-[clamp(2.6rem,4.2vw,3.8rem)] leading-[.9] tracking-[-.05em] text-[#30251a]">{t.booking.title}</h2><p className="mt-4 max-w-[310px] text-sm leading-6 text-[#665845]">{t.booking.body}</p></div>
             <div>
-              <div className="mb-3 flex max-w-[640px] flex-wrap border-b border-[#ccbda4]" role="tablist" aria-label={t.booking.selected}>
+              <div className="mb-3 flex flex-wrap border-b border-[#ccbda4]" role="tablist" aria-label={t.booking.selected}>
                 {packageData.map((item) => <button key={item.key} role="tab" aria-selected={selectedPackage === item.key} onClick={() => setSelectedPackage(item.key)} className={`relative px-3 py-3 text-[10px] font-bold uppercase tracking-[.12em] transition first:pl-0 sm:px-5 ${selectedPackage === item.key ? 'text-[#9a6e22]' : 'text-[#8a7a63] hover:text-[#30251a]'}`} data-testid={`tab-package-${item.key}`}>{item.name}{selectedPackage === item.key && <span className="absolute inset-x-3 -bottom-px h-0.5 bg-[#b89044] first:inset-x-0 sm:inset-x-5" />}</button>)}
               </div>
               <BookingEmbed slug={slugs[language][selectedPackage]} label={t.booking.selected} fallback={t.booking.fallback} loading={t.booking.loading} />

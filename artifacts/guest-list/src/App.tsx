@@ -288,13 +288,13 @@ function BookingEmbed({ slug, label, fallback, loading }: { slug: string; label:
       if (!namespace) return;
       namespace('inline', {
         elementOrSelector: `#${elementId}`,
-        config: { layout: 'month_view', useSlotsViewOnSmallScreen: 'true', theme: 'dark' },
+        config: { layout: 'month_view', useSlotsViewOnSmallScreen: 'true', theme: 'light' },
         calLink: `guestlistbooth/${slug}`,
       });
       namespace('ui', {
         hideEventTypeDetails: false,
         layout: 'month_view',
-        theme: 'dark',
+        theme: 'light',
         styles: { branding: { brandColor: '#C9A24B' } },
       });
       setReady(true);
@@ -413,7 +413,7 @@ function AppHome() {
   const [language, setLanguage] = useState<Language>(() => (localStorage.getItem('guest-list-language') as Language) || 'en');
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [selectedPackage, setSelectedPackage] = useState<PackageKey>('signature');
+  const [selectedPackage, setSelectedPackage] = useState<PackageKey>('social');
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const t = translations[language];
   const packageData = useMemo(() => packageKeys.map((key) => ({ key, ...t.packages[key] })), [t]);
@@ -472,11 +472,25 @@ function AppHome() {
             <h1 className="reveal reveal-delay-1 mt-5 whitespace-pre-line font-display text-[clamp(4rem,12vw,9.5rem)] leading-[.87] tracking-[-.055em] text-[#f5eee2]" data-testid="text-hero-title">{t.hero.title}</h1>
             <p className="reveal reveal-delay-2 mt-7 max-w-[480px] text-[15px] leading-7 text-[#e7dcca] md:text-[17px]">{t.hero.body}</p>
             <div className="reveal reveal-delay-3 mt-9 flex flex-wrap items-center gap-5">
-              <button onClick={() => jump('packages')} className="group inline-flex items-center gap-4 bg-[#c9a75d] px-6 py-4 text-[11px] font-bold uppercase tracking-[.15em] text-[#20170e] transition hover:bg-[#ecd28f]" data-testid="button-hero-packages">{t.hero.primary}<ArrowDown size={15} className="transition-transform group-hover:translate-y-1" /></button>
+              <button onClick={() => jump('booking')} className="group inline-flex items-center gap-4 bg-[#c9a75d] px-6 py-4 text-[11px] font-bold uppercase tracking-[.15em] text-[#20170e] transition hover:bg-[#ecd28f]" data-testid="button-hero-packages">{t.hero.primary}<ArrowDown size={15} className="transition-transform group-hover:translate-y-1" /></button>
               <button onClick={() => jump('experience')} className="inline-flex items-center gap-2 border-b border-[#c9a75d] pb-1 text-[11px] font-semibold uppercase tracking-[.16em] text-[#f6ecdb] transition hover:text-[#d9b76a]" data-testid="button-hero-experience">{t.hero.secondary}<ArrowUpRight size={14} /></button>
             </div>
           </div>
           <p className="absolute bottom-0 right-5 hidden rotate-90 origin-bottom-right font-mono-brand text-[9px] uppercase tracking-[.24em] text-[#e6d8bf]/70 md:block">{t.hero.scroll} &nbsp; — &nbsp;  ATL / 33.7490° N</p>
+        </div>
+      </section>
+
+      <section id="booking" className="bg-[#f0eadf] px-5 py-24 md:px-10 md:py-32">
+        <div className="mx-auto max-w-[1160px]">
+          <div className="grid gap-12 md:grid-cols-[.7fr_1.3fr] md:gap-24">
+            <div><p className="font-mono-brand text-[10px] uppercase tracking-[.22em] text-[#9a6e22]">{t.booking.label}</p><h2 className="mt-6 font-display text-[clamp(3.5rem,6vw,6rem)] leading-[.88] tracking-[-.05em] text-[#30251a]">{t.booking.title}</h2><p className="mt-7 max-w-[310px] text-sm leading-6 text-[#665845]">{t.booking.body}</p><div className="mt-10 flex items-start gap-3 border-t border-[#ccbda4] pt-5 text-xs leading-5 text-[#665845]"><Play size={13} className="mt-1 shrink-0 fill-[#b89044] text-[#b89044]" />{t.booking.note}</div></div>
+            <div>
+              <div className="mb-6 flex flex-wrap border-b border-[#ccbda4]" role="tablist" aria-label={t.booking.selected}>
+                {packageData.map((item) => <button key={item.key} role="tab" aria-selected={selectedPackage === item.key} onClick={() => setSelectedPackage(item.key)} className={`relative px-3 py-4 text-[10px] font-bold uppercase tracking-[.12em] transition first:pl-0 sm:px-5 ${selectedPackage === item.key ? 'text-[#9a6e22]' : 'text-[#8a7a63] hover:text-[#30251a]'}`} data-testid={`tab-package-${item.key}`}>{item.name}{selectedPackage === item.key && <span className="absolute inset-x-3 -bottom-px h-0.5 bg-[#b89044] first:inset-x-0 sm:inset-x-5" />}</button>)}
+              </div>
+              <BookingEmbed slug={slugs[selectedPackage]} label={t.booking.selected} fallback={t.booking.fallback} loading={t.booking.loading} />
+            </div>
+          </div>
         </div>
       </section>
 
@@ -540,20 +554,6 @@ function AppHome() {
         <div className="mx-auto grid max-w-[1160px] gap-12 md:grid-cols-[.65fr_1.35fr] md:items-center">
           <div className="flex items-center gap-3"><Sparkles size={18} /><p className="font-mono-brand text-[10px] uppercase tracking-[.22em]">{t.testimonial.label}</p></div>
           <div><blockquote className="font-display text-[clamp(2rem,4.5vw,4.2rem)] leading-[1.05] tracking-[-.035em]">“{t.testimonial.quote}”</blockquote><div className="mt-7 flex items-center gap-3 text-xs uppercase tracking-[.13em]"><span className="h-px w-8 bg-[#30251a]/60" />{t.testimonial.name} <span className="text-[#5b451f]">/</span> <span className="text-[#5b451f]">{t.testimonial.event}</span></div></div>
-        </div>
-      </section>
-
-      <section id="booking" className="bg-[#f0eadf] px-5 py-24 md:px-10 md:py-32">
-        <div className="mx-auto max-w-[1160px]">
-          <div className="grid gap-12 md:grid-cols-[.7fr_1.3fr] md:gap-24">
-            <div><p className="font-mono-brand text-[10px] uppercase tracking-[.22em] text-[#9a6e22]">{t.booking.label}</p><h2 className="mt-6 font-display text-[clamp(3.5rem,6vw,6rem)] leading-[.88] tracking-[-.05em] text-[#30251a]">{t.booking.title}</h2><p className="mt-7 max-w-[310px] text-sm leading-6 text-[#665845]">{t.booking.body}</p><div className="mt-10 flex items-start gap-3 border-t border-[#ccbda4] pt-5 text-xs leading-5 text-[#665845]"><Play size={13} className="mt-1 shrink-0 fill-[#b89044] text-[#b89044]" />{t.booking.note}</div></div>
-            <div>
-              <div className="mb-6 flex flex-wrap border-b border-[#ccbda4]" role="tablist" aria-label={t.booking.selected}>
-                {packageData.map((item) => <button key={item.key} role="tab" aria-selected={selectedPackage === item.key} onClick={() => setSelectedPackage(item.key)} className={`relative px-3 py-4 text-[10px] font-bold uppercase tracking-[.12em] transition first:pl-0 sm:px-5 ${selectedPackage === item.key ? 'text-[#9a6e22]' : 'text-[#8a7a63] hover:text-[#30251a]'}`} data-testid={`tab-package-${item.key}`}>{item.name}{selectedPackage === item.key && <span className="absolute inset-x-3 -bottom-px h-0.5 bg-[#b89044] first:inset-x-0 sm:inset-x-5" />}</button>)}
-              </div>
-              <BookingEmbed slug={slugs[selectedPackage]} label={t.booking.selected} fallback={t.booking.fallback} loading={t.booking.loading} />
-            </div>
-          </div>
         </div>
       </section>
 

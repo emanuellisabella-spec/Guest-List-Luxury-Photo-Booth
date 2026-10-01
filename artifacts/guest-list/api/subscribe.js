@@ -1,4 +1,5 @@
 // Vercel serverless function: POST /api/subscribe
+// (Plain JavaScript on purpose: the project tsconfig has noEmit, which makes Vercel skip compiling .ts functions.)
 //
 // Adds a website sign-up (checklist / timeline download) to the Zoho Campaigns
 // email list, tagged with Source and Language, as the Guest List leads guide
@@ -19,19 +20,16 @@
 //
 // The values are posted server-side, so the form details stay out of the browser.
 
-type Req = { method?: string; body?: unknown };
-type Res = { status: (code: number) => Res; json: (body: unknown) => void; setHeader: (name: string, value: string) => void };
-
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export default async function handler(req: Req, res: Res) {
+export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ ok: false });
   }
 
-  const body = (typeof req.body === 'string' ? safeParse(req.body) : req.body) as Record<string, unknown> | null;
+  const body = typeof req.body === 'string' ? safeParse(req.body) : req.body;
   const email = typeof body?.email === 'string' ? body.email.trim().toLowerCase() : '';
   const source = typeof body?.source === 'string' ? body.source.slice(0, 80) : '';
   const language = body?.language === 'es' ? 'Spanish' : 'English';
@@ -44,7 +42,7 @@ export default async function handler(req: Req, res: Res) {
   if (!action) return res.status(503).json({ ok: false, error: 'not_configured' });
 
   const params = new URLSearchParams();
-  const hidden = safeParse(process.env.ZOHO_FORM_FIELDS || '{}') as Record<string, unknown> | null;
+  const hidden = safeParse(process.env.ZOHO_FORM_FIELDS || '{}');
   for (const [key, value] of Object.entries(hidden || {})) params.set(key, String(value));
   params.set(process.env.ZOHO_EMAIL_FIELD || 'CONTACT_EMAIL', email);
   if (process.env.ZOHO_SOURCE_FIELD) params.set(process.env.ZOHO_SOURCE_FIELD, source);
@@ -65,7 +63,7 @@ export default async function handler(req: Req, res: Res) {
   }
 }
 
-function safeParse(text: string): unknown {
+function safeParse(text) {
   try {
     return JSON.parse(text);
   } catch {

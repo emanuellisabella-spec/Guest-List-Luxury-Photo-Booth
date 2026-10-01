@@ -28,11 +28,9 @@ const translations = {
     packages: {
       label: 'Pick your mood',
       title: 'The right package\nfor your people.',
-      body: 'Everything you need for an effortless guest experience, wrapped in a setup that looks as good as your event.',
       included: 'What’s included',
       popular: 'Most booked',
       book: 'Book now',
-      note: 'Every package includes delivery, setup, breakdown and a polished attendant-free experience.',
       social: { name: 'The Social', price: '$399', duration: '2 hours', description: 'An effortless, elevated photo experience for your celebration. Guests step up, strike a pose, and walk away with instant digital keepsakes.', items: ['2 hours on-site with your dedicated Guest List host', 'Digital photos, GIFs & boomerangs', 'One curated backdrop', 'Custom-designed template', 'Instant sharing via text/email/QR', 'Private online gallery delivered same night'] },
       signature: { name: 'The Signature', price: '$549', duration: '3 hours', description: 'Our most-booked experience — built for hosts who want the night to feel as good as it looks.', items: ['3 hours on-site with your dedicated Guest List host', 'Digital photos, GIFs & boomerangs', 'Premium backdrop selection', 'Custom-designed template', 'Instant sharing via text/email/QR', 'Private online gallery delivered same night', 'Guest lead capture'] },
       celebration: { name: 'The Celebration', price: '$749', duration: '4 hours', description: 'The full Guest List experience. Four hours of uninterrupted coverage, a fully branded setup, and every detail styled to match the caliber of your event.', items: ['4 hours on-site with your dedicated Guest List host', 'Digital photos, GIFs & boomerangs', 'Premium backdrop selection', 'Fully custom template & branded start screen', 'Curated prop styling', 'Instant sharing via text/email/QR', 'Private online gallery delivered same night', 'Guest lead capture'] },
@@ -135,11 +133,9 @@ footer: {
     packages: {
       label: 'Elige tu ambiente',
       title: 'El paquete perfecto\npara tu gente.',
-      body: 'Todo lo necesario para una experiencia sencilla y memorable, con un montaje tan bonito como tu evento.',
       included: 'Qué incluye',
       popular: 'Más reservado',
       book: 'Reservar ahora',
-      note: 'Todos los paquetes incluyen entrega, montaje, desmontaje y una experiencia elegante sin asistente.',
       social: { name: 'Paquete Fiesta', price: '$399', duration: '2 horas', description: 'Una experiencia fotográfica elevada y sin esfuerzo para tu celebración. Tus invitados posan y se llevan recuerdos digitales al instante.', items: ['2 horas en el evento con tu anfitrión Guest List', 'Fotos digitales, GIFs y boomerangs', 'Un fondo seleccionado', 'Plantilla diseñada a medida', 'Compartir al instante por texto/email/QR', 'Galería privada entregada esa misma noche'] },
       signature: { name: 'Paquete Fiesta Grande', price: '$549', duration: '3 horas', description: 'Nuestra experiencia más reservada, creada para anfitriones que quieren que la noche se sienta tan bien como se ve.', items: ['3 horas en el evento con tu anfitrión Guest List', 'Fotos digitales, GIFs y boomerangs', 'Selección de fondos premium', 'Plantilla diseñada a medida', 'Compartir al instante por texto/email/QR', 'Galería privada entregada esa misma noche', 'Captura de datos de invitados'] },
       celebration: { name: 'Paquete Fiesta Real', price: '$749', duration: '4 horas', description: 'La experiencia Guest List completa. Cuatro horas de cobertura, un montaje totalmente personalizado y cada detalle a la altura de tu evento.', items: ['4 horas en el evento con tu anfitrión Guest List', 'Fotos digitales, GIFs y boomerangs', 'Selección de fondos premium', 'Plantilla totalmente personalizada y pantalla de inicio con marca', 'Accesorios seleccionados', 'Compartir al instante por texto/email/QR', 'Galería privada entregada esa misma noche', 'Captura de datos de invitados'] },
@@ -172,7 +168,7 @@ footer: {
     faq: {
       title: 'Preguntas frecuentes.',
       items: [
-        ['¿Qué zonas cubren?', 'Estamos en Atlanta y servimos el área metropolitana, incluyendo Buckhead, Midtown, Decatur, Marietta, Alpharetta y lugares cercanos. Puede aplicarse un cargo de viaje fuera de nuestra zona principal.'],
+        ['¿Qué zonas cubren?', 'Estamos en Atlanta y servimos el área metropolitana, incluyendo Fair Oaks, Mableton, Buckhead, Midtown, Decatur, Marietta, Alpharetta y lugares cercanos. Puede aplicarse un cargo de viaje fuera de nuestra zona principal.'],
         ['¿Necesitan Wi-Fi?', 'No. Nuestro fotomatón mantiene la fila en movimiento incluso sin Wi-Fi. Los invitados pueden compartir por texto o email cuando haya conexión y cada galería se respalda para su entrega.'],
         ['¿Puedo personalizar la experiencia?', 'Por supuesto. El diseño, la pantalla de bienvenida y la galería se adaptan a tu evento para que todo se sienta tuyo.'],
         ['¿Con cuánta anticipación debo reservar?', 'Recomendamos de 4 a 8 semanas. Los sábados populares se llenan rápido, así que escríbenos cuando tengas tu fecha.'],
@@ -560,7 +556,6 @@ function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; 
         <div className="mx-auto max-w-[1320px]">
           <div className="mb-7 flex flex-col justify-between gap-4 md:mb-14 md:flex-row md:items-end md:gap-8">
             <div><p className="font-mono-brand text-[10px] uppercase tracking-[.22em] text-[#d9b76a]">{t.packages.label}</p><h2 className="mt-4 whitespace-pre-line font-display text-[clamp(2.3rem,7vw,6.6rem)] leading-[.92] tracking-[-.05em] md:mt-6">{t.packages.title}</h2></div>
-            <p className="max-w-[310px] text-sm leading-6 text-[#cbbda7]">{t.packages.body}</p>
           </div>
           <div ref={packageRowRef} onScroll={onPackageScroll} className="-mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:-mx-10 md:px-10 lg:mx-0 lg:grid lg:grid-cols-3 lg:gap-4 lg:overflow-visible lg:px-0 lg:pb-0" data-testid="package-carousel">
             {cardData.map((item, index) => <article key={item.key} className={`relative flex w-[84%] shrink-0 snap-center flex-col border p-5 transition-transform duration-300 hover:-translate-y-1 sm:w-[55%] md:p-8 lg:w-auto ${item.key === 'signature' ? 'border-[#c9a75d] bg-[#453722]' : 'border-[#69583e] bg-[#32271b]'}`} data-testid={`card-package-${item.key}`}>
@@ -577,7 +572,6 @@ function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; 
           <div className="mt-4 flex items-center justify-center gap-2 lg:hidden" aria-hidden="true">
             {cardData.map((item, index) => <span key={item.key} className={`h-1.5 rounded-full transition-all ${index === activePackage ? 'w-5 bg-[#c9a75d]' : 'w-1.5 bg-[#69583e]'}`} />)}
           </div>
-          <p className="mt-5 text-center font-mono-brand text-[9px] uppercase tracking-[.15em] text-[#a59479] md:mt-7">{t.packages.note}</p>
         </div>
       </section>
 

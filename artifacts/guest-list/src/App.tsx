@@ -40,7 +40,7 @@ const translations = {
       title: 'Good nights look\nbetter in replay.',
       body: 'From first toast to final song, we make room for the in-between moments — the ones that become your favorites.',
       alt1: 'Guests laughing together at an Atlanta event',
-      alt2: 'Friends posing at a wedding photo booth',
+      alt2: 'Two women laughing as they look at their photo on the booth screen',
       alt3: 'The Guest List photo booth setup',
       alt4: 'A joyful celebration captured on camera',
       alt5: 'A toast shared between friends',
@@ -157,7 +157,7 @@ footer: {
       title: 'Las buenas noches\nse ven mejor después.',
       body: 'Del primer brindis a la última canción, hacemos espacio para esos momentos espontáneos que se vuelven tus favoritos.',
       alt1: 'Invitados riendo en un evento de Atlanta',
-      alt2: 'Amigos posando en un fotomatón de boda',
+      alt2: 'Dos mujeres riendo mientras ven su foto en la pantalla del fotomatón',
       alt3: 'El montaje del fotomatón Guest List',
       alt4: 'Una celebración capturada en cámara',
       alt5: 'Un brindis compartido entre amigos',
@@ -682,7 +682,7 @@ function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; 
           {/* Swap these generated editorial assets for real event images when available. */}
           <div className="grid grid-cols-2 gap-3 md:grid-cols-12 md:gap-5">
             <figure className="group relative col-span-2 aspect-[4/5] overflow-hidden md:col-span-5 md:aspect-[5/6]"><img loading="lazy" src="/gallery-good-company.webp" alt={t.gallery.alt1} className="h-full w-full object-cover object-[50%_35%] transition duration-700 group-hover:scale-105" /><figcaption className="absolute bottom-4 left-4 font-mono-brand text-[9px] uppercase tracking-[.16em] text-white/80">01 / good company</figcaption></figure>
-            <figure className="group relative col-span-1 mt-10 aspect-[3/4] overflow-hidden md:col-span-3 md:mt-24 md:aspect-[3/4]"><img loading="lazy" src="/guest-list-gallery-2.jpg" alt={t.gallery.alt2} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" /><figcaption className="absolute bottom-4 left-4 font-mono-brand text-[9px] uppercase tracking-[.16em] text-white/80">02 / the replay</figcaption></figure>
+            <figure className="group relative col-span-1 mt-10 aspect-[3/4] overflow-hidden md:col-span-3 md:mt-24 md:aspect-[3/4]"><img loading="lazy" src="/gallery-the-replay.webp" alt={t.gallery.alt2} className="h-full w-full object-cover object-[0%_30%] transition duration-700 group-hover:scale-105" /><figcaption className="absolute bottom-4 left-4 font-mono-brand text-[9px] uppercase tracking-[.16em] text-white/80">02 / the replay</figcaption></figure>
             <figure className="group relative col-span-1 aspect-[3/4] overflow-hidden md:col-span-4 md:mt-8 md:aspect-[3/4]"><img loading="lazy" src="/gallery-well-placed.webp" alt={t.gallery.alt3} className="h-full w-full object-cover object-[70%_50%] transition duration-700 group-hover:scale-105" /><figcaption className="absolute bottom-4 left-4 font-mono-brand text-[9px] uppercase tracking-[.16em] text-white/80">03 / well placed</figcaption></figure>
              <figure className="group relative col-span-1 aspect-[3/4] overflow-hidden md:col-span-3 md:mt-[-4rem] md:aspect-[3/4]"><img loading="lazy" src="/guest-list-hero.jpg" alt={t.gallery.alt4} className="h-full w-full object-cover object-[62%] transition duration-700 group-hover:scale-105" /><figcaption className="absolute bottom-4 left-4 font-mono-brand text-[9px] uppercase tracking-[.16em] text-white/80">04 / after dark</figcaption></figure>
              <figure className="group relative col-span-1 mt-10 aspect-[3/4] overflow-hidden md:col-span-4 md:mt-8 md:aspect-[3/4]"><img loading="lazy" src="/guest-list-gallery-1.jpg" alt={t.gallery.alt5} className="h-full w-full object-cover object-[35%] transition duration-700 group-hover:scale-105" /><figcaption className="absolute bottom-4 left-4 font-mono-brand text-[9px] uppercase tracking-[.16em] text-white/80">05 / raise a glass</figcaption></figure>

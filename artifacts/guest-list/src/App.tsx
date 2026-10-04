@@ -19,12 +19,10 @@ const translations = {
       title: 'From booking to\nthe last photo.',
       body: 'Pick your date and we handle the rest. Here is what happens, from the moment you book to the morning after your event.',
       steps: [
-        ['Pick your date', 'Choose a package and a date above, then pay a flat deposit ($150 to $250, depending on the package) to hold it. Online bookings need at least 48 hours’ notice.'],
-        ['We set it up', 'We confirm your venue details and arrive early to set up before your guests do. All we need is a space of at least 8 × 8 ft and a standard outlet.'],
-        ['Guests step up', 'They walk up, tap the screen and a countdown starts. Photos, GIFs and boomerangs, with your Guest List host on hand.'],
-        ['Share and keep', 'Guests get their photos right away by text, email or QR code, and your private online gallery is ready the same night.'],
+        ['Pick your date', 'Choose a package and a date above, then pay a flat deposit to hold it. Online bookings need at least 48 hours’ notice.'],
+        ['Fill in your event form', 'After you book, we reach out and you fill in our event form with your venue, timing and details. All we need is enough space and a standard outlet.'],
+        ['Set up, snap, share', 'We arrive early and set up before your guests do. They tap the screen, a countdown starts, and they get photos, GIFs and boomerangs right away by text, email or QR code, with your Guest List host on hand. Your private online gallery is ready the same night.'],
       ],
-      detail: 'Delivered, set up and taken down for you at weddings, quinceañeras, corporate events and birthdays across Atlanta.',
       imageAlt: 'Guests using the white Guest List iPad photo booth kiosk at an event',
       cta: 'Meet the experience',
     },
@@ -139,12 +137,10 @@ footer: {
       title: 'De la reserva\na la última foto.',
       body: 'Elige tu fecha y nosotros nos encargamos del resto. Esto es lo que pasa desde que reservas hasta la mañana siguiente a tu evento.',
       steps: [
-        ['Elige tu fecha', 'Escoge un paquete y una fecha arriba, y paga un depósito fijo ($150 a $250, según el paquete) para reservarla. Las reservas en línea requieren al menos 48 horas de anticipación.'],
-        ['Nosotros lo instalamos', 'Confirmamos los detalles de tu lugar y llegamos temprano para instalar todo antes de que lleguen tus invitados. Solo necesitamos un espacio de al menos 8 × 8 pies y un enchufe estándar.'],
-        ['Tus invitados se animan', 'Se acercan, tocan la pantalla y empieza la cuenta regresiva. Fotos, GIFs y boomerangs, con tu anfitrión de Guest List a mano.'],
-        ['Comparte y conserva', 'Tus invitados reciben sus fotos al instante por texto, email o código QR, y tu galería privada en línea está lista esa misma noche.'],
+        ['Elige tu fecha', 'Escoge un paquete y una fecha arriba, y paga un depósito fijo para reservarla. Las reservas en línea requieren al menos 48 horas de anticipación.'],
+        ['Llena el formulario del evento', 'Después de reservar, nos ponemos en contacto contigo y llenas el formulario de tu evento con los detalles de tu lugar y horario. Solo necesitamos espacio suficiente y un enchufe estándar.'],
+        ['Instalamos, posan y comparten', 'Llegamos temprano para instalar todo antes de que lleguen tus invitados. Se acercan, tocan la pantalla, empieza la cuenta regresiva y reciben sus fotos, GIFs y boomerangs al instante por texto, email o código QR, con tu anfitrión de Guest List a mano. Tu galería privada en línea está lista esa misma noche.'],
       ],
-      detail: 'Lo entregamos, instalamos y recogemos por ti en bodas, quinceañeras, eventos corporativos y cumpleaños en todo Atlanta.',
       imageAlt: 'Invitados usando el fotomatón iPad blanco de Guest List en un evento',
       cta: 'Conoce la experiencia',
     },
@@ -678,7 +674,6 @@ function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; 
                 <div><h3 className="font-display text-2xl tracking-[-.02em] text-[#30251a]">{title}</h3><p className="mt-2 max-w-[560px] text-[15px] leading-7 text-[#665845]">{text}</p></div>
               </li>)}
             </ol>
-            <p className="mt-8 max-w-[580px] font-display text-xl italic leading-8 text-[#9a6e22]">{t.about.detail}</p>
           </div>
         </div>
       </section>

@@ -7,7 +7,7 @@ type PackageKey = 'social' | 'signature' | 'celebration';
 
 const translations = {
   en: {
-    nav: { about: 'The experience', packages: 'Packages', gallery: 'In the wild', faq: 'FAQ', book: 'Book your date', language: 'ES' },
+    nav: { about: 'How it works', packages: 'Packages', gallery: 'In the wild', faq: 'FAQ', book: 'Book your date', language: 'ES' },
     hero: {
       title: 'The guest list\nstarts here.',
       body: 'Sleek iPad photo booth rentals designed to blend seamlessly into your event and capture the moments your guests will replay.',
@@ -15,14 +15,17 @@ const translations = {
       secondary: 'How it works',
     },
     about: {
-      label: 'The booth',
-      title: 'A sleek white kiosk,\nbuilt for your guests.',
-      body: 'Our white iPad kiosk and soft ring light stand tall without taking over the room. Guests walk up, tap the screen, strike a pose and leave with a photo they can share before the night is over.',
+      label: 'How it works',
+      title: 'From booking to\nthe last photo.',
+      body: 'Pick your date and we handle the rest. Here is what happens, from the moment you book to the morning after your event.',
+      steps: [
+        ['Pick your date', 'Choose a package and a date above, then pay a flat deposit ($150 to $250, depending on the package) to hold it. Online bookings need at least 48 hours’ notice.'],
+        ['We set it up', 'We confirm your venue details and arrive early to set up before your guests do. All we need is a space of at least 8 × 8 ft and a standard outlet.'],
+        ['Guests step up', 'They walk up, tap the screen and a countdown starts. Photos, GIFs and boomerangs, with your Guest List host on hand.'],
+        ['Share and keep', 'Guests get their photos right away by text, email or QR code, and your private online gallery is ready the same night.'],
+      ],
       detail: 'Delivered, set up and taken down for you at weddings, quinceañeras, corporate events and birthdays across Atlanta.',
       imageAlt: 'Guests using the white Guest List iPad photo booth kiosk at an event',
-      stat1: '01', stat1Label: 'Set up with intention',
-      stat2: '02', stat2Label: 'Capture without interrupting',
-      stat3: '03', stat3Label: 'Share before the night is over',
       cta: 'Meet the experience',
     },
     packages: {
@@ -124,7 +127,7 @@ footer: {
     },
   },
   es: {
-    nav: { about: 'La experiencia', packages: 'Paquetes', gallery: 'Galería', faq: 'Preguntas', book: 'Reserva tu fecha', language: 'EN' },
+    nav: { about: 'Cómo funciona', packages: 'Paquetes', gallery: 'Galería', faq: 'Preguntas', book: 'Reserva tu fecha', language: 'EN' },
     hero: {
       title: 'La lista de invitados\nempieza aquí.',
       body: 'Alquiler de fotomatones iPad elegantes, diseñados para integrarse a tu evento y capturar los momentos que tus invitados querrán revivir.',
@@ -132,14 +135,17 @@ footer: {
       secondary: 'Cómo funciona',
     },
     about: {
-      label: 'El fotomatón',
-      title: 'Un kiosco blanco\ny elegante, para tus invitados.',
-      body: 'Nuestro kiosco blanco con iPad y aro de luz suave se luce sin robarse el salón. Tus invitados se acercan, tocan la pantalla, posan y se llevan una foto lista para compartir antes de que termine la noche.',
+      label: 'Cómo funciona',
+      title: 'De la reserva\na la última foto.',
+      body: 'Elige tu fecha y nosotros nos encargamos del resto. Esto es lo que pasa desde que reservas hasta la mañana siguiente a tu evento.',
+      steps: [
+        ['Elige tu fecha', 'Escoge un paquete y una fecha arriba, y paga un depósito fijo ($150 a $250, según el paquete) para reservarla. Las reservas en línea requieren al menos 48 horas de anticipación.'],
+        ['Nosotros lo instalamos', 'Confirmamos los detalles de tu lugar y llegamos temprano para instalar todo antes de que lleguen tus invitados. Solo necesitamos un espacio de al menos 8 × 8 pies y un enchufe estándar.'],
+        ['Tus invitados se animan', 'Se acercan, tocan la pantalla y empieza la cuenta regresiva. Fotos, GIFs y boomerangs, con tu anfitrión de Guest List a mano.'],
+        ['Comparte y conserva', 'Tus invitados reciben sus fotos al instante por texto, email o código QR, y tu galería privada en línea está lista esa misma noche.'],
+      ],
       detail: 'Lo entregamos, instalamos y recogemos por ti en bodas, quinceañeras, eventos corporativos y cumpleaños en todo Atlanta.',
       imageAlt: 'Invitados usando el fotomatón iPad blanco de Guest List en un evento',
-      stat1: '01', stat1Label: 'Montaje con intención',
-      stat2: '02', stat2Label: 'Captura sin interrumpir',
-      stat3: '03', stat3Label: 'Comparte antes de que termine la noche',
       cta: 'Conoce la experiencia',
     },
     packages: {
@@ -661,15 +667,18 @@ function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; 
           <div>
             <p className="font-mono-brand text-[10px] uppercase tracking-[.22em] text-[#9a6e22]">{t.about.label}</p>
             <div className="mt-7 h-px w-16 bg-[#b89044]" />
-            <figure className="mt-8 aspect-[3/4] max-w-[440px] overflow-hidden bg-[#e4dccb]"><img loading="lazy" src="/booth-kiosk.webp" alt={t.about.imageAlt} width={1086} height={1448} className="h-full w-full object-cover" /></figure>
+            <figure className="mt-8 aspect-[4/3] max-w-[440px] overflow-hidden bg-[#e4dccb] md:aspect-[3/4]"><img loading="lazy" src="/booth-kiosk.webp" alt={t.about.imageAlt} width={1086} height={1448} className="h-full w-full object-cover object-[50%_32%]" /></figure>
           </div>
           <div>
             <h2 className="max-w-[700px] whitespace-pre-line font-display text-[clamp(2.8rem,5.2vw,5rem)] leading-[.95] tracking-[-.045em] text-[#30251a]">{t.about.title}</h2>
             <p className="mt-9 max-w-[620px] text-lg leading-8 text-[#665845]">{t.about.body}</p>
-            <p className="mt-6 max-w-[580px] font-display text-xl italic leading-8 text-[#9a6e22]">{t.about.detail}</p>
-            <div className="mt-14 grid gap-7 border-t border-[#ccbda4] pt-7 sm:grid-cols-3">
-              {[['stat1', 'stat1Label'], ['stat2', 'stat2Label'], ['stat3', 'stat3Label']].map(([num, label]) => <div key={num}><p className="font-display text-3xl text-[#b89044]">{t.about[num as 'stat1']}</p><p className="mt-2 max-w-[130px] text-xs leading-5 text-[#665845]">{t.about[label as 'stat1Label']}</p></div>)}
-            </div>
+            <ol className="mt-12 border-t border-[#ccbda4]" data-testid="list-how-it-works">
+              {t.about.steps.map(([title, text], index) => <li key={title} className="grid grid-cols-[3rem_1fr] gap-x-4 border-b border-[#ccbda4] py-6 sm:grid-cols-[4rem_1fr]">
+                <span className="font-display text-3xl text-[#b89044]">{String(index + 1).padStart(2, '0')}</span>
+                <div><h3 className="font-display text-2xl tracking-[-.02em] text-[#30251a]">{title}</h3><p className="mt-2 max-w-[560px] text-[15px] leading-7 text-[#665845]">{text}</p></div>
+              </li>)}
+            </ol>
+            <p className="mt-8 max-w-[580px] font-display text-xl italic leading-8 text-[#9a6e22]">{t.about.detail}</p>
           </div>
         </div>
       </section>

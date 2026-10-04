@@ -583,8 +583,8 @@ function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; 
             <span className="text-[11px] font-semibold uppercase tracking-[.28em]">Guest List</span>
           </button>
           <div className="hidden items-center gap-8 lg:flex">
-            <button onClick={() => jump('experience')} className="nav-link" data-testid="link-nav-experience">{t.nav.about}</button>
             <button onClick={() => jump('packages')} className="nav-link" data-testid="link-nav-packages">{t.nav.packages}</button>
+            <button onClick={() => jump('experience')} className="nav-link" data-testid="link-nav-experience">{t.nav.about}</button>
             <button onClick={() => jump('gallery')} className="nav-link" data-testid="link-nav-gallery">{t.nav.gallery}</button>
             <button onClick={() => jump('faq')} className="nav-link" data-testid="link-nav-faq">{t.nav.faq}</button>
           </div>
@@ -596,7 +596,7 @@ function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; 
         </div>
         {menuOpen && <div className="border-t border-[#c9a75d]/25 bg-[#1c1712] px-5 py-5 lg:hidden">
           <div className="flex flex-col gap-4">
-            {[['experience', t.nav.about], ['packages', t.nav.packages], ['gallery', t.nav.gallery], ['faq', t.nav.faq], ['booking', t.nav.book]].map(([id, label]) => <button key={id} onClick={() => jump(id)} className="text-left text-xs uppercase tracking-[.18em] text-[#e9ddc5]" data-testid={`link-mobile-${id}`}>{label}</button>)}
+            {[['packages', t.nav.packages], ['experience', t.nav.about], ['gallery', t.nav.gallery], ['faq', t.nav.faq], ['booking', t.nav.book]].map(([id, label]) => <button key={id} onClick={() => jump(id)} className="text-left text-xs uppercase tracking-[.18em] text-[#e9ddc5]" data-testid={`link-mobile-${id}`}>{label}</button>)}
           </div>
         </div>}
       </nav>
@@ -633,24 +633,6 @@ function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; 
         </div>
       </section>
 
-      <section id="experience" className="bg-[#f0eadf] px-5 py-24 md:px-10 md:py-36">
-        <div className="mx-auto grid max-w-[1160px] gap-16 md:grid-cols-[.8fr_1.2fr] md:gap-24">
-          <div>
-            <p className="font-mono-brand text-[10px] uppercase tracking-[.22em] text-[#9a6e22]">{t.about.label}</p>
-            <div className="mt-7 h-px w-16 bg-[#b89044]" />
-            <figure className="mt-8 aspect-[3/4] max-w-[440px] overflow-hidden bg-[#e4dccb]"><img loading="lazy" src="/booth-kiosk.webp" alt={t.about.imageAlt} width={1086} height={1448} className="h-full w-full object-cover" /></figure>
-          </div>
-          <div>
-            <h2 className="max-w-[700px] whitespace-pre-line font-display text-[clamp(2.8rem,5.2vw,5rem)] leading-[.95] tracking-[-.045em] text-[#30251a]">{t.about.title}</h2>
-            <p className="mt-9 max-w-[620px] text-lg leading-8 text-[#665845]">{t.about.body}</p>
-            <p className="mt-6 max-w-[580px] font-display text-xl italic leading-8 text-[#9a6e22]">{t.about.detail}</p>
-            <div className="mt-14 grid gap-7 border-t border-[#ccbda4] pt-7 sm:grid-cols-3">
-              {[['stat1', 'stat1Label'], ['stat2', 'stat2Label'], ['stat3', 'stat3Label']].map(([num, label]) => <div key={num}><p className="font-display text-3xl text-[#b89044]">{t.about[num as 'stat1']}</p><p className="mt-2 max-w-[130px] text-xs leading-5 text-[#665845]">{t.about[label as 'stat1Label']}</p></div>)}
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section id="packages" className="bg-[#292017] px-5 py-12 text-[#f2e9da] md:px-10 md:py-32">
         <div className="mx-auto max-w-[1320px]">
           <div className="mb-7 flex flex-col justify-between gap-4 md:mb-14 md:flex-row md:items-end md:gap-8">
@@ -670,6 +652,24 @@ function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; 
           </div>
           <div className="mt-4 flex items-center justify-center gap-2 lg:hidden" aria-hidden="true">
             {cardData.map((item, index) => <span key={item.key} className={`h-1.5 rounded-full transition-all ${index === activePackage ? 'w-5 bg-[#c9a75d]' : 'w-1.5 bg-[#69583e]'}`} />)}
+          </div>
+        </div>
+      </section>
+
+      <section id="experience" className="bg-[#f0eadf] px-5 py-24 md:px-10 md:py-36">
+        <div className="mx-auto grid max-w-[1160px] gap-16 md:grid-cols-[.8fr_1.2fr] md:gap-24">
+          <div>
+            <p className="font-mono-brand text-[10px] uppercase tracking-[.22em] text-[#9a6e22]">{t.about.label}</p>
+            <div className="mt-7 h-px w-16 bg-[#b89044]" />
+            <figure className="mt-8 aspect-[3/4] max-w-[440px] overflow-hidden bg-[#e4dccb]"><img loading="lazy" src="/booth-kiosk.webp" alt={t.about.imageAlt} width={1086} height={1448} className="h-full w-full object-cover" /></figure>
+          </div>
+          <div>
+            <h2 className="max-w-[700px] whitespace-pre-line font-display text-[clamp(2.8rem,5.2vw,5rem)] leading-[.95] tracking-[-.045em] text-[#30251a]">{t.about.title}</h2>
+            <p className="mt-9 max-w-[620px] text-lg leading-8 text-[#665845]">{t.about.body}</p>
+            <p className="mt-6 max-w-[580px] font-display text-xl italic leading-8 text-[#9a6e22]">{t.about.detail}</p>
+            <div className="mt-14 grid gap-7 border-t border-[#ccbda4] pt-7 sm:grid-cols-3">
+              {[['stat1', 'stat1Label'], ['stat2', 'stat2Label'], ['stat3', 'stat3Label']].map(([num, label]) => <div key={num}><p className="font-display text-3xl text-[#b89044]">{t.about[num as 'stat1']}</p><p className="mt-2 max-w-[130px] text-xs leading-5 text-[#665845]">{t.about[label as 'stat1Label']}</p></div>)}
+            </div>
           </div>
         </div>
       </section>

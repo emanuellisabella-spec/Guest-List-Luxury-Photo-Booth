@@ -378,6 +378,8 @@ function BookingEmbed({ slug, label, fallback, loading }: { slug: string; label:
 //
 // Posts the sign-up straight from the visitor's browser to the Zoho Campaigns
 // form (the same way Zoho's own embed code does), tagged with Source and Language.
+// Each lead magnet has its own Zoho form and mailing list: the English wedding
+// timeline, and the Spanish quinceañera checklist (its own Spanish campaign).
 // These identifiers are public: they appear in any page that embeds the Zoho form.
 // ─────────────────────────────────────────────────────────────────────────────
 const ZOHO_FORM = {
@@ -386,25 +388,36 @@ const ZOHO_FORM = {
     zc_trackCode: '',
     viewFrom: 'URL_ACTION',
     submitType: 'optinCustomView',
-    lD: '117d7e7358a05c771',
     emailReportId: '',
     zx: '12921b4de',
     zcvers: '3.0',
     oldListIds: '',
     mode: 'OptinCreateView',
-    zcld: '117d7e7358a05c771',
     zctd: '',
-    zc_formIx: '3z819d0a1b9bb968330498d1a2eca125b5131f7982b3c22c34db73b622a5cc5890',
     PRIVACY_POLICY: 'PRIVACY_AGREED',
     // Matches Zoho's "No Script" embed, which is the variant meant for plain form posts.
     // (That embed also has a zc_spmSubmit bot-trap field that its script removes; we never send it.)
     scriptless: 'yes',
   } as Record<string, string>,
+  lists: {
+    // English: "The Wedding Reception Photo Timeline"
+    wedding: {
+      lD: '117d7e7358a05c771',
+      zcld: '117d7e7358a05c771',
+      zc_formIx: '3z819d0a1b9bb968330498d1a2eca125b5131f7982b3c22c34db73b622a5cc5890',
+    },
+    // Spanish: "Lista de Verificación de Momentos Fotográficos de Quinceañera"
+    quince: {
+      lD: '117d7e7358a060a6a',
+      zcld: '117d7e7358a060a6a',
+      zc_formIx: '3z32d0faf70b715bc27d3ebc40a330134e6f3cdb81c889652469a7416e4738cb03',
+    },
+  } as Record<'wedding' | 'quince', Record<string, string>>,
 };
 
 // Submits a hidden <form> into a hidden <iframe>. Zoho's response can't be read cross-origin,
 // so we wait for the frame to load (or a short timeout) and treat that as sent.
-function postToZoho(fields: Record<string, string>) {
+function postToZoho(fields: Record<string, string>, list: 'wedding' | 'quince') {
   return new Promise<void>((resolve) => {
     const frameName = `zc-signup-${Date.now()}`;
     const iframe = document.createElement('iframe');
@@ -417,7 +430,7 @@ function postToZoho(fields: Record<string, string>) {
     form.action = ZOHO_FORM.action;
     form.target = frameName;
     form.style.display = 'none';
-    for (const [name, value] of Object.entries({ ...ZOHO_FORM.hidden, ...fields })) {
+    for (const [name, value] of Object.entries({ ...ZOHO_FORM.hidden, ...ZOHO_FORM.lists[list], ...fields })) {
       const input = document.createElement('input');
       input.type = 'hidden';
       input.name = name;
@@ -460,7 +473,7 @@ type LeadCopy = {
   download: string;
 };
 
-function LeadMagnet({ copy, language, pdfPath, source }: { copy: LeadCopy; language: Language; pdfPath: string; source: string }) {
+function LeadMagnet({ copy, language, pdfPath, source, zohoList }: { copy: LeadCopy; language: Language; pdfPath: string; source: string; zohoList: 'wedding' | 'quince' }) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -483,7 +496,7 @@ function LeadMagnet({ copy, language, pdfPath, source }: { copy: LeadCopy; langu
         CONTACT_EMAIL: email.trim(),
         CONTACT_CF1: source,
         CONTACT_CF2: language === 'es' ? 'Spanish' : 'English',
-      });
+      }, zohoList);
       setStatus('success');
     } catch {
       setStatus('error');
@@ -558,8 +571,8 @@ function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; 
   const packageData = useMemo(() => packageKeys.map((key) => ({ key, ...t.packages[key] })), [t]);
   const cardData = useMemo(() => cardOrder.map((key) => ({ key, ...t.packages[key] })), [t]);
   const leadConfig = leadMagnet === 'quince'
-    ? { copy: t.leadQuince, pdfPath: '/quinceanera-checklist.pdf', source: 'quinceanera-checklist' }
-    : { copy: t.leadWedding, pdfPath: '/wedding-reception-timeline.pdf', source: 'wedding-reception-timeline' };
+    ? { copy: t.leadQuince, pdfPath: '/quinceanera-checklist.pdf', source: 'quinceanera-checklist', zohoList: 'quince' as const }
+    : { copy: t.leadWedding, pdfPath: '/wedding-reception-timeline.pdf', source: 'wedding-reception-timeline', zohoList: 'wedding' as const };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 34);
@@ -678,7 +691,7 @@ function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; 
         </div>
       </section>
 
-      <LeadMagnet copy={leadConfig.copy} pdfPath={leadConfig.pdfPath} source={leadConfig.source} language={language} />
+      <LeadMagnet copy={leadConfig.copy} pdfPath={leadConfig.pdfPath} source={leadConfig.source} zohoList={leadConfig.zohoList} language={language} />
 
       <section id="gallery" className="bg-[#e9e0d1] px-5 py-24 md:px-10 md:py-32">
         <div className="mx-auto max-w-[1320px]">

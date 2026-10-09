@@ -43,7 +43,7 @@ const translations = {
       alt1: 'Guests laughing together at an Atlanta event',
       alt2: 'Two women laughing as they look at their photo on the booth screen',
       alt3: 'The Guest List photo booth setup',
-      alt4: 'A joyful celebration captured on camera',
+      alt4: 'A couple laughing together beside the white Guest List photo booth after dark',
       alt5: 'A toast shared between friends',
       alt6: 'Guests celebrating under warm lights',
     },
@@ -161,7 +161,7 @@ footer: {
       alt1: 'Invitados riendo en un evento de Atlanta',
       alt2: 'Dos mujeres riendo mientras ven su foto en la pantalla del fotomatón',
       alt3: 'El montaje del fotomatón Guest List',
-      alt4: 'Una celebración capturada en cámara',
+      alt4: 'Una pareja riendo junto al fotomatón blanco de Guest List al caer la noche',
       alt5: 'Un brindis compartido entre amigos',
       alt6: 'Invitados celebrando bajo luces cálidas',
     },
@@ -701,7 +701,7 @@ function AppHome({ initialLanguage, leadMagnet }: { initialLanguage?: Language; 
             <figure className="group relative col-span-2 aspect-[4/5] overflow-hidden md:col-span-5 md:aspect-[5/6]"><img loading="lazy" src="/gallery-good-company.webp" alt={t.gallery.alt1} className="h-full w-full object-cover object-[50%_35%] transition duration-700 group-hover:scale-105" /><figcaption className="absolute bottom-4 left-4 font-mono-brand text-[9px] uppercase tracking-[.16em] text-white/80">01 / good company</figcaption></figure>
             <figure className="group relative col-span-1 mt-10 aspect-[3/4] overflow-hidden md:col-span-3 md:mt-24 md:aspect-[3/4]"><img loading="lazy" src="/gallery-the-replay.webp" alt={t.gallery.alt2} className="h-full w-full object-cover object-[0%_30%] transition duration-700 group-hover:scale-105" /><figcaption className="absolute bottom-4 left-4 font-mono-brand text-[9px] uppercase tracking-[.16em] text-white/80">02 / the replay</figcaption></figure>
             <figure className="group relative col-span-1 aspect-[3/4] overflow-hidden md:col-span-4 md:mt-8 md:aspect-[3/4]"><img loading="lazy" src="/gallery-well-placed.webp" alt={t.gallery.alt3} className="h-full w-full object-cover object-[70%_50%] transition duration-700 group-hover:scale-105" /><figcaption className="absolute bottom-4 left-4 font-mono-brand text-[9px] uppercase tracking-[.16em] text-white/80">03 / well placed</figcaption></figure>
-             <figure className="group relative col-span-1 aspect-[3/4] overflow-hidden md:col-span-3 md:mt-[-4rem] md:aspect-[3/4]"><img loading="lazy" src="/guest-list-hero.jpg" alt={t.gallery.alt4} className="h-full w-full object-cover object-[62%] transition duration-700 group-hover:scale-105" /><figcaption className="absolute bottom-4 left-4 font-mono-brand text-[9px] uppercase tracking-[.16em] text-white/80">04 / after dark</figcaption></figure>
+             <figure className="group relative col-span-1 aspect-[3/4] overflow-hidden md:col-span-3 md:mt-[-4rem] md:aspect-[3/4]"><img loading="lazy" src="/gallery-after-dark.webp" alt={t.gallery.alt4} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" /><figcaption className="absolute bottom-4 left-4 font-mono-brand text-[9px] uppercase tracking-[.16em] text-white/80">04 / after dark</figcaption></figure>
              <figure className="group relative col-span-1 mt-10 aspect-[3/4] overflow-hidden md:col-span-4 md:mt-8 md:aspect-[3/4]"><img loading="lazy" src="/guest-list-gallery-1.jpg" alt={t.gallery.alt5} className="h-full w-full object-cover object-[35%] transition duration-700 group-hover:scale-105" /><figcaption className="absolute bottom-4 left-4 font-mono-brand text-[9px] uppercase tracking-[.16em] text-white/80">05 / raise a glass</figcaption></figure>
              <figure className="group relative col-span-2 aspect-[4/5] overflow-hidden md:col-span-5 md:mt-[-3rem] md:aspect-[5/6]"><img loading="lazy" src="/guest-list-gallery-2.jpg" alt={t.gallery.alt6} className="h-full w-full object-cover object-[68%] transition duration-700 group-hover:scale-105" /><figcaption className="absolute bottom-4 left-4 font-mono-brand text-[9px] uppercase tracking-[.16em] text-white/80">06 / one more</figcaption></figure>
           </div>
